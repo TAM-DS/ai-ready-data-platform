@@ -1,0 +1,14 @@
+cases:
+  - id: revenue_by_region_last_quarter
+    question: "What was revenue by region last quarter?"
+
+    expected:
+      metric: net_revenue
+      dimensions:
+        - region
+      time_filter: previous_quarter
+
+    evaluation:
+      execution_required: true
+      security_compliant: true
+      refusal_expected: false
