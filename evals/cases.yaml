@@ -3,12 +3,15 @@ cases:
     question: "What was revenue by region last quarter?"
 
     expected:
+      behavior: clarify
+      root_causes:
+        - metric
+        - dimension
       metric: net_revenue
       dimensions:
         - region
       time_filter: previous_quarter
 
     evaluation:
-      execution_required: true
+      execution_required: false
       security_compliant: true
-      refusal_expected: false

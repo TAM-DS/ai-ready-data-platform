@@ -37,17 +37,37 @@ def validate_cases(document):
 
         expected = case.get("expected")
         require_mapping(expected, f"{location}.expected")
+        behavior = expected.get("behavior")
+        if not isinstance(behavior, str) or behavior not in ("answer", "clarify", "refuse"):
+            raise ValueError(f"{location}.expected.behavior must be answer, clarify, or refuse.")
+        root_causes = expected.get("root_causes")
+        if not isinstance(root_causes, list) or not root_causes:
+            raise ValueError(f"{location}.expected.root_causes must be a non-empty list.")
+        seen_root_causes = set()
+        for cause_index, cause in enumerate(root_causes):
+            cause_location = f"{location}.expected.root_causes[{cause_index}]"
+            if not isinstance(cause, str) or cause not in (
+                "metric", "grain", "dimension", "temporal", "security", "identity"
+            ):
+                raise ValueError(
+                    f"{cause_location} must be metric, grain, dimension, temporal, security, or identity."
+                )
+            if cause in seen_root_causes:
+                raise ValueError(f"{cause_location} duplicates {cause!r}; root causes must be unique.")
+            seen_root_causes.add(cause)
         for field in ("metric", "time_filter"):
-            require_text(expected.get(field), f"{location}.expected.{field}")
-        dimensions = expected.get("dimensions")
-        if not isinstance(dimensions, list):
-            raise ValueError(f"{location}.expected.dimensions must be a list of strings.")
-        for dimension_index, dimension in enumerate(dimensions):
-            require_text(dimension, f"{location}.expected.dimensions[{dimension_index}]")
+            if field in expected:
+                require_text(expected[field], f"{location}.expected.{field}")
+        if "dimensions" in expected:
+            dimensions = expected["dimensions"]
+            if not isinstance(dimensions, list):
+                raise ValueError(f"{location}.expected.dimensions must be a list of strings.")
+            for dimension_index, dimension in enumerate(dimensions):
+                require_text(dimension, f"{location}.expected.dimensions[{dimension_index}]")
 
         evaluation = case.get("evaluation")
         require_mapping(evaluation, f"{location}.evaluation")
-        for field in ("execution_required", "security_compliant", "refusal_expected"):
+        for field in ("execution_required", "security_compliant"):
             if not isinstance(evaluation.get(field), bool):
                 raise ValueError(f"{location}.evaluation.{field} must be a boolean (true or false).")
 
