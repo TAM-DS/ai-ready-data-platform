@@ -81,3 +81,14 @@ cases:
 
     evaluation:
       execution_required: false
+
+  - id: legacy_store_identifier_unresolved
+    question: "Which canonical store does legacy store identifier AUS-01 refer to?"
+
+    expected:
+      behavior: refuse
+      root_causes:
+        - identity
+
+    evaluation:
+      execution_required: false
