@@ -14,7 +14,6 @@ cases:
 
     evaluation:
       execution_required: false
-      security_compliant: true
 
   - id: gross_revenue_order_5002
     question: "What was gross revenue for order 5002?"
@@ -29,7 +28,6 @@ cases:
 
     evaluation:
       execution_required: true
-      security_compliant: true
 
   - id: revenue_order_5001_ambiguous_metric
     question: "What was revenue for order 5001?"
@@ -41,7 +39,6 @@ cases:
 
     evaluation:
       execution_required: false
-      security_compliant: true
 
   - id: store_101_ambiguous_region
     question: "Which region should gross revenue for Store 101 be attributed to?"
@@ -56,7 +53,6 @@ cases:
 
     evaluation:
       execution_required: false
-      security_compliant: true
 
   - id: order_5003_missing_historical_state
     question: "Which state should gross revenue for order 5003 be attributed to based on the customer's state at the time of the order?"
@@ -71,5 +67,3 @@ cases:
 
     evaluation:
       execution_required: false
-      security_compliant: true
-
