@@ -30,3 +30,15 @@ cases:
     evaluation:
       execution_required: true
       security_compliant: true
+
+  - id: revenue_order_5001_ambiguous_metric
+    question: "What was revenue for order 5001?"
+
+    expected:
+      behavior: clarify
+      root_causes:
+        - metric
+
+    evaluation:
+      execution_required: false
+      security_compliant: true
