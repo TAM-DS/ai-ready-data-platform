@@ -7,7 +7,6 @@ cases:
       root_causes:
         - metric
         - dimension
-      metric: net_revenue
       dimensions:
         - region
       time_filter: previous_quarter
