@@ -1,0 +1,8 @@
+roles:
+  regional_manager:
+    allowed:
+      - aggregate_regional_sales
+    denied:
+      - customer_names
+      - customer_emails
+      - customer_level_spend
