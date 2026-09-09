@@ -42,3 +42,18 @@ cases:
     evaluation:
       execution_required: false
       security_compliant: true
+
+  - id: store_101_ambiguous_region
+    question: "Which region should gross revenue for Store 101 be attributed to?"
+
+    expected:
+      behavior: clarify
+      root_causes:
+        - dimension
+      metric: gross_revenue
+      dimensions:
+        - region
+
+    evaluation:
+      execution_required: false
+      security_compliant: true
