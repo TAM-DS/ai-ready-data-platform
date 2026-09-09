@@ -1,6 +1,7 @@
 """Load and validate evaluation cases without evaluating SQL."""
 
 from collections.abc import Mapping
+from numbers import Number
 from pathlib import Path
 import sys
 
@@ -37,6 +38,15 @@ def validate_cases(document):
 
         expected = case.get("expected")
         require_mapping(expected, f"{location}.expected")
+        if "result" in expected:
+            result = expected["result"]
+            result_location = f"{location}.expected.result"
+            require_mapping(result, result_location)
+            if "value" not in result:
+                raise ValueError(f"{result_location} must contain a value field.")
+            value = result["value"]
+            if isinstance(value, bool) or not isinstance(value, Number):
+                raise ValueError(f"{result_location}.value must be numeric (not boolean).")
         behavior = expected.get("behavior")
         if not isinstance(behavior, str) or behavior not in ("answer", "clarify", "refuse"):
             raise ValueError(f"{location}.expected.behavior must be answer, clarify, or refuse.")

@@ -15,3 +15,18 @@ cases:
     evaluation:
       execution_required: false
       security_compliant: true
+
+  - id: gross_revenue_order_5002
+    question: "What was gross revenue for order 5002?"
+
+    expected:
+      behavior: answer
+      root_causes:
+        - grain
+      metric: gross_revenue
+      result:
+        value: 100.00
+
+    evaluation:
+      execution_required: true
+      security_compliant: true
