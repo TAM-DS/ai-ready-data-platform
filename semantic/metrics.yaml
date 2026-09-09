@@ -1,11 +1,13 @@
 metrics:
   gross_revenue:
+    label: "gross revenue"
     definition: "Order value before discounts and returns."
     source: sales_orders.gross_amount
     grain: order
     aggregation: sum
 
   net_revenue:
+    label: "net revenue"
     definition: "Order value after discounts and returns."
     expression: "gross_amount - discount_amount - returned_amount"
     source: sales_orders
