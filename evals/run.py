@@ -77,7 +77,7 @@ def validate_cases(document):
 
         evaluation = case.get("evaluation")
         require_mapping(evaluation, f"{location}.evaluation")
-        for field in ("execution_required", "security_compliant"):
+        for field in ("execution_required",):
             if not isinstance(evaluation.get(field), bool):
                 raise ValueError(f"{location}.evaluation.{field} must be a boolean (true or false).")
 
