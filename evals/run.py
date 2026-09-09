@@ -35,7 +35,11 @@ def validate_cases(document):
             raise ValueError(f"{location}.id duplicates {case_id!r}; IDs must be unique.")
         seen_ids.add(case_id)
         require_text(case.get("question"), f"{location}.question")
-
+        if "request" in case:
+            request = case["request"]
+            require_mapping(request, f"{location}.request")
+            require_text(request.get("role"), f"{location}.request.role")
+       
         expected = case.get("expected")
         require_mapping(expected, f"{location}.expected")
         if "result" in expected:
