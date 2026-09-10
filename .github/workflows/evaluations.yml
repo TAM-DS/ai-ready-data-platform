@@ -23,8 +23,6 @@ jobs:
         run: pip install -r requirements.txt
       - name: Validate evaluation cases
         run: python evals/run.py
- 
 
- 
-
-
+      - name: Verify governed control evidence
+        run: python evals/controls.py
