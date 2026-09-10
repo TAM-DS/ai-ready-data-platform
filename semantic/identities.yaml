@@ -1,0 +1,4 @@
+identities:
+  store:
+    - external_id: "AUS-01"
+      canonical_id: 101
