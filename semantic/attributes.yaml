@@ -1,0 +1,5 @@
+attributes:
+  customer_state:
+    source: customers.state_id
+    dimension: state
+    temporal_semantics: current
