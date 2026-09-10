@@ -1,0 +1,5 @@
+dimensions:
+  state:
+    label: "state"
+  business_region:
+    label: "business region"
