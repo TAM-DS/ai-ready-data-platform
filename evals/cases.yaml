@@ -89,5 +89,10 @@ cases:
       root_causes:
         - identity
 
+    post_control:
+      behavior: answer
+      result:
+        canonical_id: 101
+
     evaluation:
       execution_required: false
