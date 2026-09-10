@@ -79,6 +79,23 @@ def validate_cases(document):
             for dimension_index, dimension in enumerate(dimensions):
                 require_text(dimension, f"{location}.expected.dimensions[{dimension_index}]")
 
+        if "post_control" in case:
+            post_control = case["post_control"]
+            post_control_location = f"{location}.post_control"
+            require_mapping(post_control, post_control_location)
+            behavior = post_control.get("behavior")
+            if not isinstance(behavior, str) or behavior not in ("answer", "clarify", "refuse"):
+                raise ValueError(f"{post_control_location}.behavior must be answer, clarify, or refuse.")
+            if "result" in post_control:
+                result = post_control["result"]
+                result_location = f"{post_control_location}.result"
+                require_mapping(result, result_location)
+                if "canonical_id" not in result:
+                    raise ValueError(f"{result_location} must contain a canonical_id field.")
+                canonical_id = result["canonical_id"]
+                if isinstance(canonical_id, bool) or not isinstance(canonical_id, int):
+                    raise ValueError(f"{result_location}.canonical_id must be an integer (not boolean).")
+
         evaluation = case.get("evaluation")
         require_mapping(evaluation, f"{location}.evaluation")
         for field in ("execution_required",):
