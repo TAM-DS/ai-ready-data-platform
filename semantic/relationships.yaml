@@ -1,0 +1,14 @@
+relationships:
+  sales_orders_to_order_items:
+    left_table: sales_orders
+    right_table: order_items
+
+    join:
+      left_key: order_id
+      right_key: order_id
+
+    cardinality: one_to_many
+
+    grain:
+      left: order
+      right: order_item
