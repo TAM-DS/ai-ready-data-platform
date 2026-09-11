@@ -1,0 +1,19 @@
+{
+  "case_id": "order_5003_missing_historical_state",
+  "agent_id": "openai:gpt-5.6-terra",
+  "request": "Which state should gross revenue for order 5003 be attributed to based on the customer's state at the time of the order?",
+  "governed_evidence": {
+    "metric_matches": [
+      "gross_revenue"
+    ],
+    "dimension_matches": [
+      "state"
+    ],
+    "temporal_mismatch": true
+  },
+  "observed_behavior": {
+    "action": "CLARIFY",
+    "message": "I need the customer\u2019s historical state as of the date order 5003 was placed. The available customer-state attribute has a temporal mismatch, so I can\u2019t reliably attribute its gross revenue using the current state.",
+    "execution_performed": false
+  }
+}
