@@ -1,0 +1,16 @@
+{
+  "case_id": "store_101_ambiguous_region",
+  "agent_id": "openai:gpt-5.6-terra",
+  "request": "What was gross revenue for store 101 by region?",
+  "governed_evidence": {
+    "metric_matches": [
+      "gross_revenue"
+    ],
+    "dimension_matches": []
+  },
+  "observed_behavior": {
+    "action": "CLARIFY",
+    "message": "I can use the gross revenue metric, but I couldn\u2019t resolve a region dimension. Also, a single store typically belongs to one region. Please clarify the reporting period and whether you want store 101\u2019s gross revenue labeled with its assigned region, or a comparison of gross revenue across regions.",
+    "execution_performed": false
+  }
+}
