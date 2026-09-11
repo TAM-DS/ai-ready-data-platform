@@ -14,3 +14,23 @@ def score_identity_evidence(observed, expected):
         )
 
     return True, "Observed identity evidence matches expected canonical identity."
+
+
+def score_clarification_behavior(justified, observed):
+    interventions = justified["interventions"]
+    clarification_justified = any(
+        item["justification"] == "CLARIFY"
+        for item in interventions
+    )
+
+    if not clarification_justified:
+        return False, "Clarification was not independently justified."
+
+    action = observed["observed_behavior"]["action"]
+
+    if action != "CLARIFY":
+        return False, (
+            f"Clarification was justified, but observed action was {action}."
+        )
+
+    return True, "Observed behavior matches independently justified clarification."
