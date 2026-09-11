@@ -1,0 +1,22 @@
+{
+  "case_id": "gross_revenue_order_5002",
+  "agent_id": "openai:gpt-5.6-terra",
+  "request": "What was gross revenue for order 5002?",
+  "governed_evidence": {
+    "metric_matches": [
+      "gross_revenue"
+    ],
+    "fanout_detected": true
+  },
+  "observed_behavior": {
+    "action": "CLAIM",
+    "message": "Gross revenue for order 5002 is 100.00.",
+    "execution_performed": true,
+    "execution_capability": "execute_metric_for_order",
+    "execution_arguments": {
+      "metric_id": "gross_revenue",
+      "order_id": 5002
+    },
+    "execution_result": "100.00"
+  }
+}
