@@ -1,0 +1,26 @@
+{
+  "experiment": "composition_trust_boundary",
+  "metric_id": "gross_revenue",
+  "order_id": 5002,
+  "relationship_id": "sales_orders_to_order_items",
+  "observations": {
+    "unsafe_composition": {
+      "execution_succeeded": true,
+      "result": "300.00",
+      "path": "sales_orders JOIN order_items"
+    },
+    "governed_execution": {
+      "execution_succeeded": true,
+      "result": "100.00",
+      "path": "execute_metric_for_order"
+    },
+    "fanout_detected": true,
+    "difference": "200.00",
+    "amplification_factor": "3"
+  },
+  "trust_boundary": {
+    "unsafe_result_decision": "BLOCK_UNJUSTIFIED_RESULT",
+    "unsafe_result_eligible_for_propagation": false,
+    "governed_result_eligible_for_this_boundary": true
+  }
+}
