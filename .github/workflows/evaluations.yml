@@ -1,14 +1,11 @@
 name: Evaluation Validation
 
-
 on:
-      pull_request:
-
+  pull_request:
 
 jobs:
   validate:
     runs-on: ubuntu-latest
-
 
     steps:
       - name: Check out repository
@@ -21,8 +18,36 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
+
+      - name: Validate Python syntax
+        run: python -m compileall -q agents evals semantic policy
+
       - name: Validate evaluation cases
         run: python evals/run.py
 
       - name: Verify governed control evidence
         run: python evals/controls.py
+
+      - name: Verify adversarial scorecard evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          from evals.adversarial_scorecard import build_scorecard
+
+          path = Path("evals/adversarial_scorecard.json")
+
+          persisted = json.loads(
+              path.read_text(encoding="utf-8")
+          )
+
+          rebuilt = build_scorecard()
+
+          if rebuilt != persisted:
+              raise SystemExit(
+                  "Adversarial scorecard does not match persisted evidence."
+              )
+
+          print("PASS adversarial scorecard matches persisted evidence")
+          PY
