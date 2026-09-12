@@ -1,0 +1,42 @@
+{
+  "experiment": "risk_governance_review",
+  "agent_id": "openai:gpt-5.6-terra",
+  "deterministic_result": {
+    "controls_evaluated": 10,
+    "controls_passed": 10,
+    "controls_failed": 0,
+    "all_controls_passed": true
+  },
+  "verification": {
+    "expected_assessment": "PASS",
+    "observed_assessment": "PASS",
+    "expected_controls_evaluated": 10,
+    "observed_controls_evaluated": 10,
+    "expected_controls_failed": 0,
+    "observed_controls_failed": 0,
+    "verified": true
+  },
+  "model_explanation": {
+    "overall_assessment": "PASS",
+    "controls_evaluated": 10,
+    "controls_failed": 0,
+    "summary": "All 10 deterministic governance controls passed. The evidence establishes a fully governed chain from the originating financial fact through scenario-based forecasting, planning, independent finance/CapEx review, and executive reporting. The forecast calculation (100.00 increased by 10% to 110.00) and planning calculation (30% of 110.00, or 33.00) were independently verified. The 33.00 planning recommendation was correctly assessed as within the 40.00 financial review threshold, while preserving that this is a financial evaluation and not authorization to spend. Executive reporting retained the review status, no-spend restriction, and complete upstream claim lineage.",
+    "material_findings": [
+      "Financial fact provenance was established through governed execution by the financial_analyst agent via execute_metric_for_order.",
+      "The forecast transformation was verified: 100.00 with a 10% uplift yielded the expected and observed value of 110.00.",
+      "The forecast remained explicitly scenario-based; gross revenue was not reinterpreted as net revenue, and the projection was not represented as an observed business fact.",
+      "The planning transformation was verified: 30% of the 110.00 projected gross revenue yielded the expected and observed recommendation of 33.00.",
+      "The planning recommendation was explicitly preserved as scenario-dependent and non-authoritative for spending.",
+      "The finance/CapEx review correctly determined that 33.00 is within the 40.00 review threshold.",
+      "Canonical financial-review language was kept separate from model planning prose, while both preserved the no-spend qualification.",
+      "Executive reporting preserved the WITHIN_REVIEW_THRESHOLD status, did not assert spend authorization, and retained complete lineage across all four upstream claims."
+    ],
+    "limitations": [
+      "This assessment is limited to the 10 deterministic controls and the evidence contained in the supplied governance report.",
+      "A PASS establishes that the tested governance controls passed; it does not independently validate the underlying business accuracy, completeness, source-system integrity, or real-world appropriateness of the 100.00 input, 10% scenario assumption, 30% budget percentage, or 40.00 review threshold.",
+      "The WITHIN_REVIEW_THRESHOLD result is a financial-review determination only and must not be treated as approval, commitment, procurement authority, or authorization to spend.",
+      "The forecast and planning values remain scenario-dependent projections rather than observed business facts."
+    ]
+  },
+  "canonical_conclusion": "The governed multi-agent chain passed all deterministic governance controls evaluated in this experiment."
+}

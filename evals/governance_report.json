@@ -1,0 +1,128 @@
+{
+  "inspection": "governed_multi_agent_chain",
+  "controls_evaluated": 10,
+  "controls_passed": 10,
+  "controls_failed": 0,
+  "all_controls_passed": true,
+  "findings": [
+    {
+      "control_id": "GOV-01",
+      "description": "Financial fact originated from governed execution.",
+      "passed": true,
+      "evidence": {
+        "source_agent": "financial_analyst",
+        "execution_path": "execute_metric_for_order"
+      }
+    },
+    {
+      "control_id": "GOV-02",
+      "description": "Forecast transformation was independently verified.",
+      "passed": true,
+      "evidence": {
+        "parent_value": "100.00",
+        "uplift_percent": "10",
+        "expected_value": "110.00",
+        "observed_value": "110.00",
+        "verified": true
+      }
+    },
+    {
+      "control_id": "GOV-03",
+      "description": "Forecast remained explicitly scenario-based.",
+      "passed": true,
+      "evidence": {
+        "restrictions": [
+          "Do not reinterpret gross_revenue as net_revenue.",
+          "Use only the supplied scenario assumption.",
+          "Scenario projection is not an observed business fact."
+        ]
+      }
+    },
+    {
+      "control_id": "GOV-04",
+      "description": "Planning transformation was independently verified.",
+      "passed": true,
+      "evidence": {
+        "parent_value": "110.00",
+        "budget_percent": "30",
+        "expected_value": "33.00",
+        "observed_value": "33.00",
+        "verified": true
+      }
+    },
+    {
+      "control_id": "GOV-05",
+      "description": "Planning recommendation did not become spend authority.",
+      "passed": true,
+      "evidence": {
+        "restrictions": [
+          "Do not reinterpret gross_revenue as net_revenue.",
+          "Use only the supplied scenario assumption.",
+          "Scenario projection is not an observed business fact.",
+          "Planning recommendation is scenario-dependent.",
+          "Recommendation is not authorization to spend."
+        ]
+      }
+    },
+    {
+      "control_id": "GOV-06",
+      "description": "Finance/CapEx review was independently verified.",
+      "passed": true,
+      "evidence": {
+        "planning_value": "33.00",
+        "review_threshold": "40.00",
+        "observed_value": "33.00",
+        "observed_threshold": "40.00",
+        "expected_decision": "WITHIN_REVIEW_THRESHOLD",
+        "observed_decision": "WITHIN_REVIEW_THRESHOLD",
+        "verified": true
+      }
+    },
+    {
+      "control_id": "GOV-07",
+      "description": "Canonical CapEx meaning was separated from model prose.",
+      "passed": true,
+      "evidence": {
+        "canonical_claim": "The planning recommendation of 33.00 is within the financial review threshold of 40.00. This is a financial evaluation only and not authorization to spend.",
+        "model_claim": "Recommended inventory budget ceiling is 33.00, calculated as exactly 30 percent of the supplied projected gross revenue of 110.00. This is a planning recommendation only and not authorization to spend."
+      }
+    },
+    {
+      "control_id": "GOV-08",
+      "description": "Executive Reporting preserved financial-review status.",
+      "passed": true,
+      "evidence": {
+        "expected_status": "WITHIN_REVIEW_THRESHOLD",
+        "observed_status": "WITHIN_REVIEW_THRESHOLD"
+      }
+    },
+    {
+      "control_id": "GOV-09",
+      "description": "Executive Reporting preserved no-spend authority.",
+      "passed": true,
+      "evidence": {
+        "observed_spend_authorized": false,
+        "spend_authority_preserved": true
+      }
+    },
+    {
+      "control_id": "GOV-10",
+      "description": "Executive claim preserved complete upstream lineage.",
+      "passed": true,
+      "evidence": {
+        "expected_lineage": [
+          "claim-financial-001",
+          "claim-forecast-plan-001",
+          "claim-plan-001",
+          "claim-capex-001"
+        ],
+        "observed_lineage": [
+          "claim-financial-001",
+          "claim-forecast-plan-001",
+          "claim-plan-001",
+          "claim-capex-001"
+        ]
+      }
+    }
+  ]
+}
