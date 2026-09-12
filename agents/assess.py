@@ -49,3 +49,49 @@ def assess_for_planning(
         trust_boundary="planning_input",
         trust_decision="ALLOW_VERIFIED_SCENARIO",
     )
+
+
+def assess_for_capex(
+    envelope: ResultEnvelope,
+) -> ResultEnvelope:
+    """Assess one Planning claim for the finance_capex_input boundary."""
+    envelope.validate()
+
+    if envelope.source_agent != "planning":
+        return replace(
+            envelope,
+            trust_status="BLOCKED_AT_BOUNDARY",
+            trust_boundary="finance_capex_input",
+            trust_decision="BLOCK_WRONG_SOURCE_AGENT",
+        )
+
+    numeric_verification = envelope.evidence.get(
+        "numeric_verification",
+        {}
+    )
+
+    if numeric_verification.get("verified") is not True:
+        return replace(
+            envelope,
+            trust_status="BLOCKED_AT_BOUNDARY",
+            trust_boundary="finance_capex_input",
+            trust_decision="BLOCK_UNVERIFIED_PLANNING_TRANSFORMATION",
+        )
+
+    if (
+        "Recommendation is not authorization to spend."
+        not in envelope.restrictions
+    ):
+        return replace(
+            envelope,
+            trust_status="BLOCKED_AT_BOUNDARY",
+            trust_boundary="finance_capex_input",
+            trust_decision="BLOCK_MISSING_SPEND_RESTRICTION",
+        )
+
+    return replace(
+        envelope,
+        trust_status="ELIGIBLE_FOR_BOUNDARY",
+        trust_boundary="finance_capex_input",
+        trust_decision="ALLOW_PLANNING_RECOMMENDATION",
+    )
