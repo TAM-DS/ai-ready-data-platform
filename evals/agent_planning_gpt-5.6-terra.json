@@ -1,0 +1,136 @@
+{
+  "experiment": "forecasting_to_planning",
+  "agent_id": "openai:gpt-5.6-terra",
+  "parent_envelope": {
+    "trace_id": "trace-forecast-001",
+    "claim_id": "claim-forecast-plan-001",
+    "source_agent": "forecasting",
+    "claim": "Projected gross revenue for order 5002 under the supplied scenario is 110.00.",
+    "value": "110.00",
+    "evidence": {
+      "parent_claim_id": "claim-financial-001",
+      "parent_source_agent": "financial_analyst",
+      "parent_metric_id": "gross_revenue",
+      "parent_evidence": {
+        "execution_path": "execute_metric_for_order",
+        "order_id": 5002,
+        "relationship_id": "sales_orders_to_order_items",
+        "fanout_detected": true
+      },
+      "transformation": "scenario_projection",
+      "scenario_uplift_percent": "10",
+      "numeric_verification": {
+        "parent_value": "100.00",
+        "uplift_percent": "10",
+        "expected_value": "110.00",
+        "observed_value": "110.00",
+        "verified": true
+      },
+      "model": "gpt-5.6-terra",
+      "model_assumptions": [
+        "Applied the supplied scenario assumption of an exactly 10 percent increase to the approved gross revenue value of 100.00."
+      ]
+    },
+    "metric_id": "gross_revenue",
+    "trust_status": "ELIGIBLE_FOR_BOUNDARY",
+    "trust_boundary": "planning_input",
+    "trust_decision": "ALLOW_VERIFIED_SCENARIO",
+    "restrictions": [
+      "Do not reinterpret gross_revenue as net_revenue.",
+      "Use only the supplied scenario assumption.",
+      "Scenario projection is not an observed business fact."
+    ],
+    "parent_claim_ids": [
+      "claim-financial-001"
+    ]
+  },
+  "route_decision": {
+    "decision": "ALLOW_TRANSFER",
+    "source_agent": "forecasting",
+    "target_agent": "planning",
+    "claim_id": "claim-forecast-plan-001",
+    "trace_id": "trace-forecast-001",
+    "restrictions": [
+      "Do not reinterpret gross_revenue as net_revenue.",
+      "Use only the supplied scenario assumption.",
+      "Scenario projection is not an observed business fact."
+    ],
+    "parent_claim_ids": [
+      "claim-financial-001"
+    ]
+  },
+  "numeric_verification": {
+    "parent_value": "110.00",
+    "budget_percent": "30",
+    "expected_value": "33.00",
+    "observed_value": "33.00",
+    "verified": true
+  },
+  "child_envelope": {
+    "trace_id": "trace-forecast-001",
+    "claim_id": "claim-plan-001",
+    "source_agent": "planning",
+    "claim": "Recommended inventory budget ceiling is 33.00, calculated as exactly 30 percent of the supplied projected gross revenue of 110.00. This is a planning recommendation only and not authorization to spend.",
+    "value": "33.00",
+    "evidence": {
+      "parent_claim_id": "claim-forecast-plan-001",
+      "parent_source_agent": "forecasting",
+      "parent_metric_id": "gross_revenue",
+      "parent_evidence": {
+        "parent_claim_id": "claim-financial-001",
+        "parent_source_agent": "financial_analyst",
+        "parent_metric_id": "gross_revenue",
+        "parent_evidence": {
+          "execution_path": "execute_metric_for_order",
+          "order_id": 5002,
+          "relationship_id": "sales_orders_to_order_items",
+          "fanout_detected": true
+        },
+        "transformation": "scenario_projection",
+        "scenario_uplift_percent": "10",
+        "numeric_verification": {
+          "parent_value": "100.00",
+          "uplift_percent": "10",
+          "expected_value": "110.00",
+          "observed_value": "110.00",
+          "verified": true
+        },
+        "model": "gpt-5.6-terra",
+        "model_assumptions": [
+          "Applied the supplied scenario assumption of an exactly 10 percent increase to the approved gross revenue value of 100.00."
+        ]
+      },
+      "transformation": "inventory_budget_ceiling",
+      "budget_percent": "30",
+      "numeric_verification": {
+        "parent_value": "110.00",
+        "budget_percent": "30",
+        "expected_value": "33.00",
+        "observed_value": "33.00",
+        "verified": true
+      },
+      "model": "gpt-5.6-terra",
+      "model_assumptions": [
+        "The supplied projected gross revenue of 110.00 is an eligible planning input under the approved parent envelope.",
+        "The projection is scenario-based and is not interpreted as observed revenue.",
+        "The inventory budget ceiling is calculated using exactly the supplied planning-rule percentage of 30 percent.",
+        "Gross revenue is not reinterpreted as net revenue."
+      ]
+    },
+    "metric_id": null,
+    "trust_status": "UNASSESSED",
+    "trust_boundary": null,
+    "trust_decision": null,
+    "restrictions": [
+      "Do not reinterpret gross_revenue as net_revenue.",
+      "Use only the supplied scenario assumption.",
+      "Scenario projection is not an observed business fact.",
+      "Planning recommendation is scenario-dependent.",
+      "Recommendation is not authorization to spend."
+    ],
+    "parent_claim_ids": [
+      "claim-financial-001",
+      "claim-forecast-plan-001"
+    ]
+  }
+}
