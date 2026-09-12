@@ -58,6 +58,7 @@ agents:
   finance_capex:
     name: Finance and CapEx Agent
     objective: Evaluate consequential investment decisions from justified inputs.
+    input_boundary: finance_capex_input
     primary_risks:
       - amplification
       - consequential_action
