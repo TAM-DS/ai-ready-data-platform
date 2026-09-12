@@ -1,0 +1,88 @@
+agents:
+  financial_analyst:
+    name: Financial Analyst
+    objective: Analyze governed financial performance metrics.
+    primary_risks:
+      - semantic_ambiguity
+      - grain
+    downstream:
+      - forecasting
+
+  regional_sales_manager:
+    name: Regional Sales Manager
+    objective: Analyze performance within authorized regional scope.
+    primary_risks:
+      - authorization
+      - dimension_ambiguity
+    downstream:
+      - forecasting
+
+  customer_analytics:
+    name: Customer Analytics Agent
+    objective: Analyze customer behavior within governed privacy boundaries.
+    primary_risks:
+      - authorization
+      - pii
+    downstream:
+      - forecasting
+
+  store_operations:
+    name: Store Operations Agent
+    objective: Analyze governed store-level operational performance.
+    primary_risks:
+      - identity_resolution
+      - temporal_correctness
+    downstream:
+      - forecasting
+
+  forecasting:
+    name: Forecasting Agent
+    objective: Produce forecasts only from evidence-backed trusted inputs.
+    input_boundary: forecasting_input
+    primary_risks:
+      - propagation
+      - unsupported_inputs
+    downstream:
+      - planning
+
+  planning:
+    name: Planning Agent
+    objective: Convert trusted forecasts into bounded operating plans.
+    primary_risks:
+      - amplification
+      - propagation
+    downstream:
+      - finance_capex
+
+  finance_capex:
+    name: Finance and CapEx Agent
+    objective: Evaluate consequential investment decisions from justified inputs.
+    primary_risks:
+      - amplification
+      - consequential_action
+    downstream:
+      - executive_reporting
+
+  executive_reporting:
+    name: Executive Reporting Agent
+    objective: Synthesize governed results for executive consumption.
+    primary_risks:
+      - aggregation
+      - provenance_loss
+    downstream: []
+
+  risk_governance:
+    name: Risk and Governance Agent
+    objective: Inspect policy, evidence, and trust-boundary decisions.
+    primary_risks:
+      - incomplete_evidence
+      - false_confidence
+    downstream: []
+
+  audit:
+    name: Audit Agent
+    objective: Reconstruct how claims, controls, and decisions were produced.
+    primary_risks:
+      - missing_traceability
+      - provenance_loss
+    downstream: []
