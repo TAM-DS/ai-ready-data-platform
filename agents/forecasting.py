@@ -230,6 +230,7 @@ def run_experiment() -> dict:
         claim_id=CHILD_CLAIM_ID,
         claim=observation["forecast"]["claim"],
         value=observation["forecast"]["forecast_value"],
+        metric_id=parent.metric_id,
         evidence={
             "transformation": "scenario_projection",
             "scenario_uplift_percent": "10",

@@ -12,6 +12,7 @@ def create_child_envelope(
     claim_id: str,
     claim: str,
     value: Any,
+    metric_id: str | None,
     evidence: dict[str, Any],
     restrictions: list[str] | None = None,
 ) -> ResultEnvelope:
@@ -34,10 +35,11 @@ def create_child_envelope(
         source_agent=target_agent,
         claim=claim,
         value=value,
-        metric_id=parent.metric_id,
+        metric_id=metric_id,
         evidence={
             "parent_claim_id": parent.claim_id,
             "parent_source_agent": parent.source_agent,
+            "parent_metric_id": parent.metric_id,
             "parent_evidence": parent.evidence,
             **evidence,
         },
