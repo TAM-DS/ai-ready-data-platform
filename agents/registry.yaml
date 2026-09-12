@@ -48,6 +48,7 @@ agents:
   planning:
     name: Planning Agent
     objective: Convert trusted forecasts into bounded operating plans.
+    input_boundary: planning_input
     primary_risks:
       - amplification
       - propagation
