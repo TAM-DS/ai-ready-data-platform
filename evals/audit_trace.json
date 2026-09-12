@@ -1,0 +1,117 @@
+{
+  "audit": "executive_claim_lineage",
+  "final_claim_id": "claim-executive-001",
+  "expected_claim_ids": [
+    "claim-financial-001",
+    "claim-forecast-plan-001",
+    "claim-plan-001",
+    "claim-capex-001",
+    "claim-executive-001"
+  ],
+  "observed_claim_ids": [
+    "claim-financial-001",
+    "claim-forecast-plan-001",
+    "claim-plan-001",
+    "claim-capex-001",
+    "claim-executive-001"
+  ],
+  "lineage_complete": true,
+  "all_verifications_passed": true,
+  "capex_semantic_divergence_detected": true,
+  "claims": [
+    {
+      "claim_id": "claim-financial-001",
+      "source_agent": "financial_analyst",
+      "claim": "Gross revenue for order 5002 is 100.00.",
+      "value": "100.00",
+      "trust_boundary": "forecasting_input",
+      "trust_decision": "ALLOW_GOVERNED_RESULT",
+      "artifact": "evals/agent_forecasting_gpt-5.6-terra.json"
+    },
+    {
+      "claim_id": "claim-forecast-plan-001",
+      "source_agent": "forecasting",
+      "claim": "Projected gross revenue for order 5002 under the supplied scenario is 110.00.",
+      "value": "110.00",
+      "parent_claim_ids": [
+        "claim-financial-001"
+      ],
+      "transformation": "scenario_projection",
+      "verification": {
+        "parent_value": "100.00",
+        "uplift_percent": "10",
+        "expected_value": "110.00",
+        "observed_value": "110.00",
+        "verified": true
+      },
+      "artifact": "evals/agent_planning_gpt-5.6-terra.json"
+    },
+    {
+      "claim_id": "claim-plan-001",
+      "source_agent": "planning",
+      "claim": "Recommended inventory budget ceiling is 33.00, calculated as exactly 30 percent of the supplied projected gross revenue of 110.00. This is a planning recommendation only and not authorization to spend.",
+      "value": "33.00",
+      "parent_claim_ids": [
+        "claim-financial-001",
+        "claim-forecast-plan-001"
+      ],
+      "transformation": "inventory_budget_ceiling",
+      "verification": {
+        "parent_value": "110.00",
+        "budget_percent": "30",
+        "expected_value": "33.00",
+        "observed_value": "33.00",
+        "verified": true
+      },
+      "artifact": "evals/agent_planning_gpt-5.6-terra.json"
+    },
+    {
+      "claim_id": "claim-capex-001",
+      "source_agent": "finance_capex",
+      "claim": "The planning recommendation of 33.00 is within the financial review threshold of 40.00. This is a financial evaluation only and not authorization to spend.",
+      "value": "WITHIN_REVIEW_THRESHOLD",
+      "parent_claim_ids": [
+        "claim-financial-001",
+        "claim-forecast-plan-001",
+        "claim-plan-001"
+      ],
+      "transformation": "financial_review",
+      "verification": {
+        "planning_value": "33.00",
+        "review_threshold": "40.00",
+        "observed_value": "33.00",
+        "observed_threshold": "40.00",
+        "expected_decision": "WITHIN_REVIEW_THRESHOLD",
+        "observed_decision": "WITHIN_REVIEW_THRESHOLD",
+        "verified": true
+      },
+      "model_claim": "Recommended inventory budget ceiling is 33.00, calculated as exactly 30 percent of the supplied projected gross revenue of 110.00. This is a planning recommendation only and not authorization to spend.",
+      "canonical_differs_from_model": true,
+      "artifact": "evals/agent_capex_gpt-5.6-terra.json"
+    },
+    {
+      "claim_id": "claim-executive-001",
+      "source_agent": "executive_reporting",
+      "claim": "The planning recommendation is within the governed financial review threshold. This status is reportable to executives but does not authorize spending or commitment of funds.",
+      "value": "WITHIN_REVIEW_THRESHOLD",
+      "parent_claim_ids": [
+        "claim-financial-001",
+        "claim-forecast-plan-001",
+        "claim-plan-001",
+        "claim-capex-001"
+      ],
+      "transformation": "executive_financial_summary",
+      "verification": {
+        "expected_financial_review_status": "WITHIN_REVIEW_THRESHOLD",
+        "observed_financial_review_status": "WITHIN_REVIEW_THRESHOLD",
+        "status_preserved": true,
+        "expected_spend_authorized": false,
+        "observed_spend_authorized": false,
+        "spend_authority_preserved": true,
+        "verified": true
+      },
+      "model_summary": "The planning recommendation of 33.00 is within the financial review threshold of 40.00. This is a scenario-dependent financial evaluation based on projected gross revenue and does not authorize spending; no funds may be committed from this claim.",
+      "artifact": "evals/agent_executive_reporting_gpt-5.6-terra.json"
+    }
+  ]
+}
