@@ -1,0 +1,87 @@
+{
+  "experiment": "financial_analyst_to_forecasting",
+  "agent_id": "openai:gpt-5.6-terra",
+  "parent_envelope": {
+    "trace_id": "trace-forecast-001",
+    "claim_id": "claim-financial-001",
+    "source_agent": "financial_analyst",
+    "claim": "Gross revenue for order 5002 is 100.00.",
+    "value": "100.00",
+    "evidence": {
+      "execution_path": "execute_metric_for_order",
+      "order_id": 5002,
+      "relationship_id": "sales_orders_to_order_items",
+      "fanout_detected": true
+    },
+    "metric_id": "gross_revenue",
+    "trust_status": "ELIGIBLE_FOR_BOUNDARY",
+    "trust_boundary": "forecasting_input",
+    "trust_decision": "ALLOW_GOVERNED_RESULT",
+    "restrictions": [
+      "Do not reinterpret gross_revenue as net_revenue.",
+      "Use only the supplied scenario assumption."
+    ],
+    "parent_claim_ids": []
+  },
+  "route_decision": {
+    "decision": "ALLOW_TRANSFER",
+    "source_agent": "financial_analyst",
+    "target_agent": "forecasting",
+    "claim_id": "claim-financial-001",
+    "trace_id": "trace-forecast-001",
+    "restrictions": [
+      "Do not reinterpret gross_revenue as net_revenue.",
+      "Use only the supplied scenario assumption."
+    ],
+    "parent_claim_ids": []
+  },
+  "numeric_verification": {
+    "parent_value": "100.00",
+    "uplift_percent": "10",
+    "expected_value": "110.00",
+    "observed_value": "110.00",
+    "verified": true
+  },
+  "child_envelope": {
+    "trace_id": "trace-forecast-001",
+    "claim_id": "claim-forecast-001",
+    "source_agent": "forecasting",
+    "claim": "Projected gross revenue for order 5002 is 110.00.",
+    "value": "110.00",
+    "evidence": {
+      "parent_claim_id": "claim-financial-001",
+      "parent_source_agent": "financial_analyst",
+      "parent_evidence": {
+        "execution_path": "execute_metric_for_order",
+        "order_id": 5002,
+        "relationship_id": "sales_orders_to_order_items",
+        "fanout_detected": true
+      },
+      "transformation": "scenario_projection",
+      "scenario_uplift_percent": "10",
+      "numeric_verification": {
+        "parent_value": "100.00",
+        "uplift_percent": "10",
+        "expected_value": "110.00",
+        "observed_value": "110.00",
+        "verified": true
+      },
+      "model": "gpt-5.6-terra",
+      "model_assumptions": [
+        "Scenario assumption used: increase the supplied gross revenue value of 100.00 by exactly 10 percent."
+      ]
+    },
+    "metric_id": "gross_revenue",
+    "trust_status": "UNASSESSED",
+    "trust_boundary": null,
+    "trust_decision": null,
+    "restrictions": [
+      "Do not reinterpret gross_revenue as net_revenue.",
+      "Use only the supplied scenario assumption.",
+      "Scenario projection is not an observed business fact."
+    ],
+    "parent_claim_ids": [
+      "claim-financial-001"
+    ]
+  }
+}
