@@ -6,3 +6,16 @@ roles:
       - customer_names
       - customer_emails
       - customer_level_spend
+
+  customer_analytics:
+    allowed:
+      - aggregate_customer_behavior
+    denied:
+      - customer_names
+      - customer_emails
+      - customer_level_spend
+
+  store_operations:
+    allowed:
+      - store_performance_analysis
+    denied: []

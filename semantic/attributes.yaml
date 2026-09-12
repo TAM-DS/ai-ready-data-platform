@@ -3,3 +3,8 @@ attributes:
     source: customers.state_id
     dimension: state
     temporal_semantics: current
+
+  store_business_region:
+    source: stores.business_region_id
+    dimension: business_region
+    temporal_semantics: current
