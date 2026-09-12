@@ -68,6 +68,7 @@ agents:
   executive_reporting:
     name: Executive Reporting Agent
     objective: Synthesize governed results for executive consumption.
+    input_boundary: executive_reporting_input
     primary_risks:
       - aggregation
       - provenance_loss
