@@ -121,17 +121,9 @@ The original business chain progresses from **Financial Analyst** through **Fore
 
 The [parallel collaboration layer](docs/COLLABORATION.md) extends the operational roles already used for adversarial testing:
 
-```mermaid
-flowchart TD
-  S["Application-approved warehouse snapshot"] --> R["Regional Sales"]
-  S --> C["Customer Analytics"]
-  S --> O["Store Operations"]
-  R --> G["Independent assessment and reconciliation"]
-  C --> G
-  O --> G
-  G --> E["Supported review package and evidence"]
-  G --> W["Unsupported or conflicting claims withheld"]
-```
+![Approved warehouse facts flow to Regional Sales, Customer Analytics, and Store Operations. Independent assessment and reconciliation produce a supported review package and withhold unsupported or conflicting claims.](docs/diagrams/parallel-collaboration.svg)
+
+[Editable Mermaid source](docs/diagrams/parallel-collaboration.mmd).
 
 The SDK backend gives each specialist a scoped read-only `read_fact` tool and requires a typed candidate reply. The application binds its identity and capability. Models receive no SQL interface, warehouse connection, customer identifiers, peer-routing tool, or spending tool.
 
