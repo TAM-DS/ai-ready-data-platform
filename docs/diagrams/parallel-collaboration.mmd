@@ -1,0 +1,9 @@
+flowchart TD
+  S["Application-approved warehouse snapshot"] --> R["Regional Sales"]
+  S --> C["Customer Analytics"]
+  S --> O["Store Operations"]
+  R --> G["Independent assessment and reconciliation"]
+  C --> G
+  O --> G
+  G --> E["Supported review package and evidence"]
+  G --> W["Unsupported or conflicting claims withheld"]
