@@ -29,6 +29,32 @@ The regional and store totals use the same captured warehouse evidence. Agreemen
 
 ## Run in PyCharm
 
+The original Ubuntu development environment does not need to be copied to the Mac. This extension uses Python, DuckDB, and the OpenAI Agents SDK, and lives in the same repository as the original controls. Create a fresh project environment on each machine. CI runs the offline tests and evidence replay on Ubuntu/Python 3.14 and Apple Silicon macOS/Python 3.13. Those hosted checks are separate from validation on your own workstation and from live-provider validation.
+
+For the Python 3.13 and `uv` baseline declared in `TAM-DS/enterprise-AI-workstation`, clone the review branch into a new folder:
+
+```bash
+git clone --branch feat/governed-parallel-collaboration https://github.com/TAM-DS/ai-ready-data-platform.git
+cd ai-ready-data-platform
+uv venv --python 3.13 .venv
+uv pip install --python .venv/bin/python -r requirements-collaboration.txt
+```
+
+If you already have a checkout, use a clean working tree and select `feat/governed-parallel-collaboration` instead of cloning over it. Do not move an Ubuntu virtual environment to macOS or reuse another application's environment.
+
+Open the project folder in PyCharm, choose **Add Local Interpreter**, and select the existing `.venv/bin/python`. PyCharm's Java runtime in its About dialog runs the IDE; the project interpreter is the Python runtime used by this code.
+
+Run these from the project root in PyCharm's terminal; explicit interpreter paths do not depend on terminal auto-activation:
+
+```bash
+.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python -m collaboration demo --scenario invalid --compare
+```
+
+The first command should pass 35 tests. The second should show `REVIEW_REQUIRED`, one blocked $300 claim, supported $100 evidence, `spend_authorized: false`, and `decision_equivalent: true`. This invocation prints the results and can be repeated without overwriting artifacts.
+
+To persist a run or create a PyCharm run configuration, follow the steps below using that same interpreter:
+
 1. Open this repository as a PyCharm project and select a Python 3.12+ virtual environment as its interpreter.
 2. From PyCharm's terminal, install the extension's pinned dependencies:
 
