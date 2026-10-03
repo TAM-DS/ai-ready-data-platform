@@ -106,7 +106,15 @@ Alternatively, select the model with `--model`. Model choice is explicit; there 
 
 The adapter runs the actual SDK `Agent`, `Runner`, scoped function tool, and structured output schema. The coordinator owns retries; SDK and HTTP client retries are disabled. Timeout and transient transport failures may be retried. Malformed output, permission errors, and other failures remain visible and are not retried.
 
-Live mode deliberately excludes fixture fault injection and sequential comparison. This change has been validated with offline fixtures and an injected SDK model transport. No live-model behavior, live latency improvement, or provider cost claim follows from those tests.
+Live mode deliberately excludes fixture fault injection and sequential comparison. Automated CI validates offline fixtures and an injected SDK model transport. On October 3, 2026, the user also ran the live adapter on a MacBook Air M5 with Python 3.13.14 and `gpt-6-luna` against the synthetic warehouse. The [recorded terminal observation](../evals/collaboration_live_observation.json) reports `READY_FOR_REVIEW`, three specialist runs, peak concurrency of three, no failed or missing specialists, and no spending authority. That run took 8.181 seconds; there is no sequential live baseline or speedup claim.
+
+The observation records user-supplied stdout, not an independently inspected full run artifact. The complete artifact remains on that workstation at `collaboration-artifacts/mac-live-01.json`. To reconstruct its decisions from the saved evidence, run:
+
+```bash
+.venv/bin/python -m collaboration verify collaboration-artifacts/mac-live-01.json
+```
+
+One successful clean synthetic run establishes that this live path worked in that environment. It does not establish production reliability, live adversarial containment, or measured provider cost.
 
 ## Bounds and evidence
 
