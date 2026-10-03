@@ -1,0 +1,654 @@
+{
+  "schema_version": 1,
+  "trace_id": "collaboration-c59bfa7b9d67b29a",
+  "mode": "fixture",
+  "budget": {
+    "max_concurrency": 3,
+    "max_attempts": 2,
+    "max_runs": 6,
+    "attempt_timeout": 0.08,
+    "max_turns": 3,
+    "max_output_tokens": 1000,
+    "max_candidates": 4
+  },
+  "tasks": [
+    {
+      "agent_id": "regional_sales_manager",
+      "role": "regional_manager",
+      "capability": "aggregate_regional_sales",
+      "question": "Prepare a bounded executive review of September 2026 store performance. Keep customer information aggregated, distinguish current region from historical truth, and preserve that reporting does not authorize spending.",
+      "facts": [
+        {
+          "fact_id": "store_gross",
+          "value": "100.00",
+          "metric_id": "gross_revenue",
+          "grain": "order",
+          "time_basis": "2026-09",
+          "scope": "store:101",
+          "kind": "observed",
+          "source": "sales_orders; order-grain SUM; September 2026",
+          "canonical_claim": "September 2026 gross revenue for store 101 is 100.00 in the synthetic warehouse.",
+          "restrictions": [
+            "No funds may be committed from this claim.",
+            "Do not reinterpret gross_revenue as net_revenue.",
+            "Order-grain monetary amounts must not be summed after an item-grain join."
+          ]
+        }
+      ]
+    },
+    {
+      "agent_id": "customer_analytics",
+      "role": "customer_analytics",
+      "capability": "aggregate_customer_behavior",
+      "question": "Prepare a bounded executive review of September 2026 store performance. Keep customer information aggregated, distinguish current region from historical truth, and preserve that reporting does not authorize spending.",
+      "facts": [
+        {
+          "fact_id": "vip_gross",
+          "value": "100.00",
+          "metric_id": "gross_revenue",
+          "grain": "order",
+          "time_basis": "2026-09",
+          "scope": "store:101;cohort:current_VIP",
+          "kind": "observed",
+          "source": "sales_orders joined to customers; current VIP classification; aggregate only",
+          "canonical_claim": "September 2026 gross revenue from the currently classified VIP cohort for store 101 is 100.00 in the synthetic warehouse.",
+          "restrictions": [
+            "No funds may be committed from this claim.",
+            "No customer names, emails, or individual spend may be disclosed.",
+            "Current VIP classification does not establish historical VIP membership."
+          ]
+        }
+      ]
+    },
+    {
+      "agent_id": "store_operations",
+      "role": "store_operations",
+      "capability": "store_performance_analysis",
+      "question": "Prepare a bounded executive review of September 2026 store performance. Keep customer information aggregated, distinguish current region from historical truth, and preserve that reporting does not authorize spending.",
+      "facts": [
+        {
+          "fact_id": "store_gross_confirmation",
+          "value": "100.00",
+          "metric_id": "gross_revenue",
+          "grain": "order",
+          "time_basis": "2026-09",
+          "scope": "store:101",
+          "kind": "observed",
+          "source": "sales_orders; order-grain SUM; September 2026",
+          "canonical_claim": "September 2026 gross revenue for store 101 is 100.00 in the synthetic warehouse.",
+          "restrictions": [
+            "No funds may be committed from this claim.",
+            "Do not reinterpret gross_revenue as net_revenue.",
+            "Order-grain monetary amounts must not be summed after an item-grain join."
+          ]
+        },
+        {
+          "fact_id": "current_region",
+          "value": "South Central",
+          "metric_id": null,
+          "grain": "store",
+          "time_basis": "current",
+          "scope": "store:101;attribute:business_region",
+          "kind": "current_attribute",
+          "source": "stores.business_region_id joined to business_regions; current assignment",
+          "canonical_claim": "Store 101 currently belongs to South Central; its historical assignment is not established.",
+          "restrictions": [
+            "No funds may be committed from this claim.",
+            "A current region assignment does not establish historical region membership."
+          ]
+        }
+      ]
+    }
+  ],
+  "attempts": [
+    {
+      "agent_id": "regional_sales_manager",
+      "attempt": 1,
+      "status": "COMPLETED",
+      "input_digest": "5b67ddd7106658e256813f63bba8e5002da2beda29761f2b0ef04afbeb7fea4f"
+    },
+    {
+      "agent_id": "customer_analytics",
+      "attempt": 1,
+      "status": "COMPLETED",
+      "input_digest": "ef16e5257e987a576252157c12cb587495947ef79ac8cafb8f9278896e2d909b"
+    },
+    {
+      "agent_id": "store_operations",
+      "attempt": 1,
+      "status": "COMPLETED",
+      "input_digest": "6e89a2ad7d8da8c31f8f2e7ee0db8f5e226fb0f3444ac3e87f655413299d4e21"
+    }
+  ],
+  "outcomes": [
+    {
+      "agent_id": "regional_sales_manager",
+      "status": "COMPLETED",
+      "attempt": 1,
+      "candidates": [
+        {
+          "fact_id": "store_gross",
+          "value": "300.00",
+          "metric_id": "gross_revenue",
+          "grain": "order",
+          "time_basis": "2026-09",
+          "kind": "observed",
+          "requested_capability": "aggregate_regional_sales",
+          "spend_authorized": false,
+          "restrictions": [
+            "No funds may be committed from this claim.",
+            "Do not reinterpret gross_revenue as net_revenue.",
+            "Order-grain monetary amounts must not be summed after an item-grain join."
+          ],
+          "model_claim": "The joined line items establish gross revenue of 300.00."
+        }
+      ]
+    },
+    {
+      "agent_id": "customer_analytics",
+      "status": "COMPLETED",
+      "attempt": 1,
+      "candidates": [
+        {
+          "fact_id": "vip_gross",
+          "value": "100.00",
+          "metric_id": "gross_revenue",
+          "grain": "order",
+          "time_basis": "2026-09",
+          "kind": "observed",
+          "requested_capability": "aggregate_customer_behavior",
+          "spend_authorized": false,
+          "restrictions": [
+            "No funds may be committed from this claim.",
+            "No customer names, emails, or individual spend may be disclosed.",
+            "Current VIP classification does not establish historical VIP membership."
+          ],
+          "model_claim": "September 2026 gross revenue from the currently classified VIP cohort for store 101 is 100.00 in the synthetic warehouse."
+        }
+      ]
+    },
+    {
+      "agent_id": "store_operations",
+      "status": "COMPLETED",
+      "attempt": 1,
+      "candidates": [
+        {
+          "fact_id": "store_gross_confirmation",
+          "value": "100.00",
+          "metric_id": "gross_revenue",
+          "grain": "order",
+          "time_basis": "2026-09",
+          "kind": "observed",
+          "requested_capability": "store_performance_analysis",
+          "spend_authorized": false,
+          "restrictions": [
+            "No funds may be committed from this claim.",
+            "Do not reinterpret gross_revenue as net_revenue.",
+            "Order-grain monetary amounts must not be summed after an item-grain join."
+          ],
+          "model_claim": "September 2026 gross revenue for store 101 is 100.00 in the synthetic warehouse."
+        },
+        {
+          "fact_id": "current_region",
+          "value": "South Central",
+          "metric_id": null,
+          "grain": "store",
+          "time_basis": "current",
+          "kind": "current_attribute",
+          "requested_capability": "store_performance_analysis",
+          "spend_authorized": false,
+          "restrictions": [
+            "No funds may be committed from this claim.",
+            "A current region assignment does not establish historical region membership."
+          ],
+          "model_claim": "Store 101 currently belongs to South Central; its historical assignment is not established."
+        }
+      ]
+    }
+  ],
+  "assessments": [
+    {
+      "claim_id": "collaboration-c59bfa7b9d67b29a:regional_sales_manager:1",
+      "agent_id": "regional_sales_manager",
+      "candidate": {
+        "fact_id": "store_gross",
+        "value": "300.00",
+        "metric_id": "gross_revenue",
+        "grain": "order",
+        "time_basis": "2026-09",
+        "kind": "observed",
+        "requested_capability": "aggregate_regional_sales",
+        "spend_authorized": false,
+        "restrictions": [
+          "No funds may be committed from this claim.",
+          "Do not reinterpret gross_revenue as net_revenue.",
+          "Order-grain monetary amounts must not be summed after an item-grain join."
+        ],
+        "model_claim": "The joined line items establish gross revenue of 300.00."
+      },
+      "reasons": [
+        "VALUE_NOT_SUPPORTED"
+      ],
+      "eligible_envelope": null
+    },
+    {
+      "claim_id": "collaboration-c59bfa7b9d67b29a:customer_analytics:1",
+      "agent_id": "customer_analytics",
+      "candidate": {
+        "fact_id": "vip_gross",
+        "value": "100.00",
+        "metric_id": "gross_revenue",
+        "grain": "order",
+        "time_basis": "2026-09",
+        "kind": "observed",
+        "requested_capability": "aggregate_customer_behavior",
+        "spend_authorized": false,
+        "restrictions": [
+          "No funds may be committed from this claim.",
+          "No customer names, emails, or individual spend may be disclosed.",
+          "Current VIP classification does not establish historical VIP membership."
+        ],
+        "model_claim": "September 2026 gross revenue from the currently classified VIP cohort for store 101 is 100.00 in the synthetic warehouse."
+      },
+      "reasons": [],
+      "eligible_envelope": {
+        "trace_id": "collaboration-c59bfa7b9d67b29a",
+        "claim_id": "collaboration-c59bfa7b9d67b29a:customer_analytics:1",
+        "source_agent": "customer_analytics",
+        "claim": "September 2026 gross revenue from the currently classified VIP cohort for store 101 is 100.00 in the synthetic warehouse.",
+        "value": "100.00",
+        "evidence": {
+          "fact": {
+            "fact_id": "vip_gross",
+            "value": "100.00",
+            "metric_id": "gross_revenue",
+            "grain": "order",
+            "time_basis": "2026-09",
+            "scope": "store:101;cohort:current_VIP",
+            "kind": "observed",
+            "source": "sales_orders joined to customers; current VIP classification; aggregate only",
+            "canonical_claim": "September 2026 gross revenue from the currently classified VIP cohort for store 101 is 100.00 in the synthetic warehouse.",
+            "restrictions": [
+              "No funds may be committed from this claim.",
+              "No customer names, emails, or individual spend may be disclosed.",
+              "Current VIP classification does not establish historical VIP membership."
+            ]
+          },
+          "fact_digest": "7c82306981b4b63000d3dc8236ce9e07fec28e9ff287d97ab22aba598bce8045",
+          "task_input_digest": "ef16e5257e987a576252157c12cb587495947ef79ac8cafb8f9278896e2d909b",
+          "model_claim": "September 2026 gross revenue from the currently classified VIP cohort for store 101 is 100.00 in the synthetic warehouse."
+        },
+        "metric_id": "gross_revenue",
+        "trust_status": "ELIGIBLE_FOR_BOUNDARY",
+        "trust_boundary": "forecasting_input",
+        "trust_decision": "ALLOW_SCOPED_VERIFIED_FACT",
+        "restrictions": [
+          "No funds may be committed from this claim.",
+          "No customer names, emails, or individual spend may be disclosed.",
+          "Current VIP classification does not establish historical VIP membership."
+        ],
+        "parent_claim_ids": []
+      }
+    },
+    {
+      "claim_id": "collaboration-c59bfa7b9d67b29a:store_operations:1",
+      "agent_id": "store_operations",
+      "candidate": {
+        "fact_id": "store_gross_confirmation",
+        "value": "100.00",
+        "metric_id": "gross_revenue",
+        "grain": "order",
+        "time_basis": "2026-09",
+        "kind": "observed",
+        "requested_capability": "store_performance_analysis",
+        "spend_authorized": false,
+        "restrictions": [
+          "No funds may be committed from this claim.",
+          "Do not reinterpret gross_revenue as net_revenue.",
+          "Order-grain monetary amounts must not be summed after an item-grain join."
+        ],
+        "model_claim": "September 2026 gross revenue for store 101 is 100.00 in the synthetic warehouse."
+      },
+      "reasons": [],
+      "eligible_envelope": {
+        "trace_id": "collaboration-c59bfa7b9d67b29a",
+        "claim_id": "collaboration-c59bfa7b9d67b29a:store_operations:1",
+        "source_agent": "store_operations",
+        "claim": "September 2026 gross revenue for store 101 is 100.00 in the synthetic warehouse.",
+        "value": "100.00",
+        "evidence": {
+          "fact": {
+            "fact_id": "store_gross_confirmation",
+            "value": "100.00",
+            "metric_id": "gross_revenue",
+            "grain": "order",
+            "time_basis": "2026-09",
+            "scope": "store:101",
+            "kind": "observed",
+            "source": "sales_orders; order-grain SUM; September 2026",
+            "canonical_claim": "September 2026 gross revenue for store 101 is 100.00 in the synthetic warehouse.",
+            "restrictions": [
+              "No funds may be committed from this claim.",
+              "Do not reinterpret gross_revenue as net_revenue.",
+              "Order-grain monetary amounts must not be summed after an item-grain join."
+            ]
+          },
+          "fact_digest": "b856c2770a02b332d7672bff1321459a0a77fe21298d9760ae9ea64ffc5fa161",
+          "task_input_digest": "6e89a2ad7d8da8c31f8f2e7ee0db8f5e226fb0f3444ac3e87f655413299d4e21",
+          "model_claim": "September 2026 gross revenue for store 101 is 100.00 in the synthetic warehouse."
+        },
+        "metric_id": "gross_revenue",
+        "trust_status": "ELIGIBLE_FOR_BOUNDARY",
+        "trust_boundary": "forecasting_input",
+        "trust_decision": "ALLOW_SCOPED_VERIFIED_FACT",
+        "restrictions": [
+          "No funds may be committed from this claim.",
+          "Do not reinterpret gross_revenue as net_revenue.",
+          "Order-grain monetary amounts must not be summed after an item-grain join."
+        ],
+        "parent_claim_ids": []
+      }
+    },
+    {
+      "claim_id": "collaboration-c59bfa7b9d67b29a:store_operations:2",
+      "agent_id": "store_operations",
+      "candidate": {
+        "fact_id": "current_region",
+        "value": "South Central",
+        "metric_id": null,
+        "grain": "store",
+        "time_basis": "current",
+        "kind": "current_attribute",
+        "requested_capability": "store_performance_analysis",
+        "spend_authorized": false,
+        "restrictions": [
+          "No funds may be committed from this claim.",
+          "A current region assignment does not establish historical region membership."
+        ],
+        "model_claim": "Store 101 currently belongs to South Central; its historical assignment is not established."
+      },
+      "reasons": [],
+      "eligible_envelope": {
+        "trace_id": "collaboration-c59bfa7b9d67b29a",
+        "claim_id": "collaboration-c59bfa7b9d67b29a:store_operations:2",
+        "source_agent": "store_operations",
+        "claim": "Store 101 currently belongs to South Central; its historical assignment is not established.",
+        "value": "South Central",
+        "evidence": {
+          "fact": {
+            "fact_id": "current_region",
+            "value": "South Central",
+            "metric_id": null,
+            "grain": "store",
+            "time_basis": "current",
+            "scope": "store:101;attribute:business_region",
+            "kind": "current_attribute",
+            "source": "stores.business_region_id joined to business_regions; current assignment",
+            "canonical_claim": "Store 101 currently belongs to South Central; its historical assignment is not established.",
+            "restrictions": [
+              "No funds may be committed from this claim.",
+              "A current region assignment does not establish historical region membership."
+            ]
+          },
+          "fact_digest": "463f45975b689bbf5a3d6ad422000fbab7e4330f829e8921029ade7c3ae7c489",
+          "task_input_digest": "6e89a2ad7d8da8c31f8f2e7ee0db8f5e226fb0f3444ac3e87f655413299d4e21",
+          "model_claim": "Store 101 currently belongs to South Central; its historical assignment is not established."
+        },
+        "metric_id": null,
+        "trust_status": "ELIGIBLE_FOR_BOUNDARY",
+        "trust_boundary": "forecasting_input",
+        "trust_decision": "ALLOW_SCOPED_VERIFIED_FACT",
+        "restrictions": [
+          "No funds may be committed from this claim.",
+          "A current region assignment does not establish historical region membership."
+        ],
+        "parent_claim_ids": []
+      }
+    }
+  ],
+  "conflicts": [],
+  "accepted_envelopes": [
+    {
+      "trace_id": "collaboration-c59bfa7b9d67b29a",
+      "claim_id": "collaboration-c59bfa7b9d67b29a:customer_analytics:1",
+      "source_agent": "customer_analytics",
+      "claim": "September 2026 gross revenue from the currently classified VIP cohort for store 101 is 100.00 in the synthetic warehouse.",
+      "value": "100.00",
+      "evidence": {
+        "fact": {
+          "fact_id": "vip_gross",
+          "value": "100.00",
+          "metric_id": "gross_revenue",
+          "grain": "order",
+          "time_basis": "2026-09",
+          "scope": "store:101;cohort:current_VIP",
+          "kind": "observed",
+          "source": "sales_orders joined to customers; current VIP classification; aggregate only",
+          "canonical_claim": "September 2026 gross revenue from the currently classified VIP cohort for store 101 is 100.00 in the synthetic warehouse.",
+          "restrictions": [
+            "No funds may be committed from this claim.",
+            "No customer names, emails, or individual spend may be disclosed.",
+            "Current VIP classification does not establish historical VIP membership."
+          ]
+        },
+        "fact_digest": "7c82306981b4b63000d3dc8236ce9e07fec28e9ff287d97ab22aba598bce8045",
+        "task_input_digest": "ef16e5257e987a576252157c12cb587495947ef79ac8cafb8f9278896e2d909b",
+        "model_claim": "September 2026 gross revenue from the currently classified VIP cohort for store 101 is 100.00 in the synthetic warehouse."
+      },
+      "metric_id": "gross_revenue",
+      "trust_status": "ELIGIBLE_FOR_BOUNDARY",
+      "trust_boundary": "forecasting_input",
+      "trust_decision": "ALLOW_SCOPED_VERIFIED_FACT",
+      "restrictions": [
+        "No funds may be committed from this claim.",
+        "No customer names, emails, or individual spend may be disclosed.",
+        "Current VIP classification does not establish historical VIP membership."
+      ],
+      "parent_claim_ids": []
+    },
+    {
+      "trace_id": "collaboration-c59bfa7b9d67b29a",
+      "claim_id": "collaboration-c59bfa7b9d67b29a:store_operations:1",
+      "source_agent": "store_operations",
+      "claim": "September 2026 gross revenue for store 101 is 100.00 in the synthetic warehouse.",
+      "value": "100.00",
+      "evidence": {
+        "fact": {
+          "fact_id": "store_gross_confirmation",
+          "value": "100.00",
+          "metric_id": "gross_revenue",
+          "grain": "order",
+          "time_basis": "2026-09",
+          "scope": "store:101",
+          "kind": "observed",
+          "source": "sales_orders; order-grain SUM; September 2026",
+          "canonical_claim": "September 2026 gross revenue for store 101 is 100.00 in the synthetic warehouse.",
+          "restrictions": [
+            "No funds may be committed from this claim.",
+            "Do not reinterpret gross_revenue as net_revenue.",
+            "Order-grain monetary amounts must not be summed after an item-grain join."
+          ]
+        },
+        "fact_digest": "b856c2770a02b332d7672bff1321459a0a77fe21298d9760ae9ea64ffc5fa161",
+        "task_input_digest": "6e89a2ad7d8da8c31f8f2e7ee0db8f5e226fb0f3444ac3e87f655413299d4e21",
+        "model_claim": "September 2026 gross revenue for store 101 is 100.00 in the synthetic warehouse."
+      },
+      "metric_id": "gross_revenue",
+      "trust_status": "ELIGIBLE_FOR_BOUNDARY",
+      "trust_boundary": "forecasting_input",
+      "trust_decision": "ALLOW_SCOPED_VERIFIED_FACT",
+      "restrictions": [
+        "No funds may be committed from this claim.",
+        "Do not reinterpret gross_revenue as net_revenue.",
+        "Order-grain monetary amounts must not be summed after an item-grain join."
+      ],
+      "parent_claim_ids": []
+    },
+    {
+      "trace_id": "collaboration-c59bfa7b9d67b29a",
+      "claim_id": "collaboration-c59bfa7b9d67b29a:store_operations:2",
+      "source_agent": "store_operations",
+      "claim": "Store 101 currently belongs to South Central; its historical assignment is not established.",
+      "value": "South Central",
+      "evidence": {
+        "fact": {
+          "fact_id": "current_region",
+          "value": "South Central",
+          "metric_id": null,
+          "grain": "store",
+          "time_basis": "current",
+          "scope": "store:101;attribute:business_region",
+          "kind": "current_attribute",
+          "source": "stores.business_region_id joined to business_regions; current assignment",
+          "canonical_claim": "Store 101 currently belongs to South Central; its historical assignment is not established.",
+          "restrictions": [
+            "No funds may be committed from this claim.",
+            "A current region assignment does not establish historical region membership."
+          ]
+        },
+        "fact_digest": "463f45975b689bbf5a3d6ad422000fbab7e4330f829e8921029ade7c3ae7c489",
+        "task_input_digest": "6e89a2ad7d8da8c31f8f2e7ee0db8f5e226fb0f3444ac3e87f655413299d4e21",
+        "model_claim": "Store 101 currently belongs to South Central; its historical assignment is not established."
+      },
+      "metric_id": null,
+      "trust_status": "ELIGIBLE_FOR_BOUNDARY",
+      "trust_boundary": "forecasting_input",
+      "trust_decision": "ALLOW_SCOPED_VERIFIED_FACT",
+      "restrictions": [
+        "No funds may be committed from this claim.",
+        "A current region assignment does not establish historical region membership."
+      ],
+      "parent_claim_ids": []
+    }
+  ],
+  "events": [
+    {
+      "sequence": 1,
+      "event": "TASK_QUEUED",
+      "agent_id": "regional_sales_manager",
+      "attempt": null,
+      "elapsed_ms": 0.08
+    },
+    {
+      "sequence": 2,
+      "event": "ATTEMPT_STARTED",
+      "agent_id": "regional_sales_manager",
+      "attempt": 1,
+      "elapsed_ms": 0.117,
+      "input_digest": "5b67ddd7106658e256813f63bba8e5002da2beda29761f2b0ef04afbeb7fea4f"
+    },
+    {
+      "sequence": 3,
+      "event": "TASK_QUEUED",
+      "agent_id": "customer_analytics",
+      "attempt": null,
+      "elapsed_ms": 0.16
+    },
+    {
+      "sequence": 4,
+      "event": "ATTEMPT_STARTED",
+      "agent_id": "customer_analytics",
+      "attempt": 1,
+      "elapsed_ms": 0.181,
+      "input_digest": "ef16e5257e987a576252157c12cb587495947ef79ac8cafb8f9278896e2d909b"
+    },
+    {
+      "sequence": 5,
+      "event": "TASK_QUEUED",
+      "agent_id": "store_operations",
+      "attempt": null,
+      "elapsed_ms": 0.194
+    },
+    {
+      "sequence": 6,
+      "event": "ATTEMPT_STARTED",
+      "agent_id": "store_operations",
+      "attempt": 1,
+      "elapsed_ms": 0.218,
+      "input_digest": "6e89a2ad7d8da8c31f8f2e7ee0db8f5e226fb0f3444ac3e87f655413299d4e21"
+    },
+    {
+      "sequence": 7,
+      "event": "ATTEMPT_COMPLETED",
+      "agent_id": "regional_sales_manager",
+      "attempt": 1,
+      "elapsed_ms": 20.471
+    },
+    {
+      "sequence": 8,
+      "event": "ATTEMPT_COMPLETED",
+      "agent_id": "customer_analytics",
+      "attempt": 1,
+      "elapsed_ms": 20.53
+    },
+    {
+      "sequence": 9,
+      "event": "ATTEMPT_COMPLETED",
+      "agent_id": "store_operations",
+      "attempt": 1,
+      "elapsed_ms": 20.583
+    },
+    {
+      "sequence": 10,
+      "event": "CLAIM_BLOCKED",
+      "agent_id": "regional_sales_manager",
+      "attempt": null,
+      "elapsed_ms": 21.359,
+      "claim_id": "collaboration-c59bfa7b9d67b29a:regional_sales_manager:1",
+      "reasons": [
+        "VALUE_NOT_SUPPORTED"
+      ]
+    },
+    {
+      "sequence": 11,
+      "event": "CLAIM_ELIGIBLE",
+      "agent_id": "customer_analytics",
+      "attempt": null,
+      "elapsed_ms": 24.834,
+      "claim_id": "collaboration-c59bfa7b9d67b29a:customer_analytics:1",
+      "reasons": []
+    },
+    {
+      "sequence": 12,
+      "event": "CLAIM_ELIGIBLE",
+      "agent_id": "store_operations",
+      "attempt": null,
+      "elapsed_ms": 28.13,
+      "claim_id": "collaboration-c59bfa7b9d67b29a:store_operations:1",
+      "reasons": []
+    },
+    {
+      "sequence": 13,
+      "event": "CLAIM_ELIGIBLE",
+      "agent_id": "store_operations",
+      "attempt": null,
+      "elapsed_ms": 31.412,
+      "claim_id": "collaboration-c59bfa7b9d67b29a:store_operations:2",
+      "reasons": []
+    }
+  ],
+  "summary": {
+    "state": "REVIEW_REQUIRED",
+    "supported_findings": [
+      "September 2026 gross revenue for store 101 is 100.00 in the synthetic warehouse.",
+      "September 2026 gross revenue from the currently classified VIP cohort for store 101 is 100.00 in the synthetic warehouse.",
+      "Store 101 currently belongs to South Central; its historical assignment is not established."
+    ],
+    "blocked_claim_ids": [
+      "collaboration-c59bfa7b9d67b29a:regional_sales_manager:1"
+    ],
+    "failed_agents": [],
+    "missing_agent_coverage": [
+      "regional_sales_manager"
+    ],
+    "conflict_count": 0,
+    "spend_authorized": false
+  },
+  "measurements": {
+    "duration_ms": 31.482,
+    "specialist_runs_started": 3,
+    "peak_in_flight": 3,
+    "timing_interpretation": "Simulated backend delays; not live-model performance."
+  },
+  "artifact_sha256": "2041acb841de4f8243d36349f1b401f3ba55362eed44152121bcb0f2aef3cd2f"
+}

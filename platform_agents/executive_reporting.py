@@ -17,10 +17,10 @@ from openai import OpenAI
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from agents.assess import assess_for_executive_reporting
-from agents.envelope import ResultEnvelope
-from agents.runtime import load_registry, route_envelope
-from agents.transform import create_child_envelope
+from platform_agents.assess import assess_for_executive_reporting
+from platform_agents.envelope import ResultEnvelope
+from platform_agents.runtime import load_registry, route_envelope
+from platform_agents.transform import create_child_envelope
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -321,3 +321,4 @@ if __name__ == "__main__":
         handle.write("\n")
 
     print(json.dumps(result, indent=2))
+

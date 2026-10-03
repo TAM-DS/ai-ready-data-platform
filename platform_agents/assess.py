@@ -2,7 +2,7 @@
 
 from dataclasses import replace
 
-from agents.envelope import ResultEnvelope
+from platform_agents.envelope import ResultEnvelope
 
 
 def assess_for_planning(
@@ -141,3 +141,4 @@ def assess_for_executive_reporting(
         trust_boundary="executive_reporting_input",
         trust_decision="ALLOW_FINANCIAL_EVALUATION_REPORTING",
     )
+

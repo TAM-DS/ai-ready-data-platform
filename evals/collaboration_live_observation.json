@@ -1,0 +1,51 @@
+{
+  "observation_schema_version": 1,
+  "observation_type": "user_provided_terminal_output",
+  "observed_on": "2026-10-03",
+  "repository": "TAM-DS/ai-ready-data-platform",
+  "environment": {
+    "machine": "MacBook Air M5",
+    "os": "macOS 26.6.2",
+    "python": "3.13.14",
+    "openai": "3.13.0",
+    "openai_agents": "0.23.1"
+  },
+  "selected_model": "gpt-6-luna",
+  "command": ".venv/bin/python -m collaboration demo --mode live --output collaboration-artifacts/mac-live-01.json",
+  "evidence_scope": "The user executed the live command and supplied its terminal summary, then executed saved-artifact verification and supplied the successful replay result. The full local run artifact has not been independently inspected or committed. This observation is not itself a replayable run artifact.",
+  "reported_summary": {
+    "mode": "live",
+    "state": "READY_FOR_REVIEW",
+    "supported_findings": [
+      "September 2026 gross revenue for store 101 is 100.00 in the synthetic warehouse.",
+      "September 2026 gross revenue from the currently classified VIP cohort for store 101 is 100.00 in the synthetic warehouse.",
+      "Store 101 currently belongs to South Central; its historical assignment is not established."
+    ],
+    "blocked_claim_ids": [],
+    "failed_agents": [],
+    "missing_agent_coverage": [],
+    "conflict_count": 0,
+    "spend_authorized": false,
+    "measurements": {
+      "duration_ms": 8181.497,
+      "specialist_runs_started": 3,
+      "peak_in_flight": 3,
+      "timing_interpretation": "Measured this run; no latency or cost SLA."
+    },
+    "artifact_sha256": "3f9199c37b7031f81768aaf63c452859915ec125eb456856a958b6d2bc81ba7a"
+  },
+  "replay_command": ".venv/bin/python -m collaboration verify collaboration-artifacts/mac-live-01.json",
+  "reported_replay": {
+    "verified": true,
+    "trace_id": "collaboration-c59bfa7b9d67b29a",
+    "state": "READY_FOR_REVIEW",
+    "accepted_claims": 4,
+    "blocked_claims": 0,
+    "conflicts": 0
+  },
+  "limitations": [
+    "One successful clean synthetic scenario; no live adversarial evaluation was performed.",
+    "No sequential live baseline or live-model speedup was measured.",
+    "No cost measurement or production reliability claim follows from this observation."
+  ]
+}

@@ -18,9 +18,9 @@ from openai import OpenAI
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from agents.envelope import ResultEnvelope
-from agents.runtime import load_registry, route_envelope
-from agents.transform import create_child_envelope
+from platform_agents.envelope import ResultEnvelope
+from platform_agents.runtime import load_registry, route_envelope
+from platform_agents.transform import create_child_envelope
 from execution.execute import execute_metric_for_order
 from semantic.grain import introduces_fanout
 
@@ -277,3 +277,4 @@ if __name__ == "__main__":
         handle.write("\n")
 
     print(json.dumps(result, indent=2))
+

@@ -2,8 +2,8 @@
 
 from typing import Any
 
-from agents.envelope import ResultEnvelope
-from agents.runtime import route_envelope
+from platform_agents.envelope import ResultEnvelope
+from platform_agents.runtime import route_envelope
 
 
 def create_child_envelope(
@@ -50,3 +50,4 @@ def create_child_envelope(
             parent.claim_id,
         ],
     )
+
