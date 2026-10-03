@@ -9,3 +9,6 @@ __pycache__/
 
 # Local secrets
 .env
+
+# Per-run collaboration evidence; committed fixtures live under evals/.
+collaboration-artifacts/

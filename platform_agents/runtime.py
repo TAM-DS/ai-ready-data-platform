@@ -11,7 +11,7 @@ from typing import Any
 
 import yaml
 
-from agents.envelope import ResultEnvelope
+from platform_agents.envelope import ResultEnvelope
 
 
 REGISTRY_PATH = Path(__file__).resolve().with_name("registry.yaml")
@@ -119,3 +119,4 @@ def route_envelope(
         "restrictions": list(envelope.restrictions),
         "parent_claim_ids": list(envelope.parent_claim_ids),
     }
+

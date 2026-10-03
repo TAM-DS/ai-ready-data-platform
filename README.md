@@ -86,20 +86,25 @@ Every major claim in this README is tied to code, persisted evidence, or a repro
 | A technically valid join can produce a financially invalid result | [`warehouse/SCHEMA.md`](warehouse/SCHEMA.md), [`evals/cases.yaml`](evals/cases.yaml), [`evals/controls.py`](evals/controls.py) |
 | Semantic meaning must be explicit before AI reasoning can be trusted | [`semantic/`](semantic/), [`docs/EVALUATION.md`](docs/EVALUATION.md) |
 | Authorization must be deterministic rather than model opinion | [`policy/access.yaml`](policy/access.yaml), [`policy/authorize.py`](policy/authorize.py) |
-| Trust must be assessed for the specific downstream boundary | [`agents/runtime.py`](agents/runtime.py), [`agents/assess.py`](agents/assess.py), [`agents/envelope.py`](agents/envelope.py) |
-| A correct downstream transformation does not inherit upstream trust automatically | [`agents/transform.py`](agents/transform.py), [`agents/forecasting.py`](agents/forecasting.py), [`agents/planning.py`](agents/planning.py) |
-| Model wording must not automatically become canonical business meaning | [`agents/capex.py`](agents/capex.py), [`evals/agent_capex_first_observation_gpt-5.6-terra.json`](evals/agent_capex_first_observation_gpt-5.6-terra.json), [`evals/agent_capex_gpt-5.6-terra.json`](evals/agent_capex_gpt-5.6-terra.json) |
-| Governance should evaluate evidence, not ask the producing model to grade itself | [`agents/governance.py`](agents/governance.py), [`evals/governance_report.json`](evals/governance_report.json) |
-| A final executive claim should be reconstructable end to end | [`agents/audit.py`](agents/audit.py), [`evals/audit_trace.json`](evals/audit_trace.json) |
+| Trust must be assessed for the specific downstream boundary | [`platform_agents/runtime.py`](platform_agents/runtime.py), [`platform_agents/assess.py`](platform_agents/assess.py), [`platform_agents/envelope.py`](platform_agents/envelope.py) |
+| A correct downstream transformation does not inherit upstream trust automatically | [`platform_agents/transform.py`](platform_agents/transform.py), [`platform_agents/forecasting.py`](platform_agents/forecasting.py), [`platform_agents/planning.py`](platform_agents/planning.py) |
+| Model wording must not automatically become canonical business meaning | [`platform_agents/capex.py`](platform_agents/capex.py), [`evals/agent_capex_first_observation_gpt-5.6-terra.json`](evals/agent_capex_first_observation_gpt-5.6-terra.json), [`evals/agent_capex_gpt-5.6-terra.json`](evals/agent_capex_gpt-5.6-terra.json) |
+| Governance should evaluate evidence, not ask the producing model to grade itself | [`platform_agents/governance.py`](platform_agents/governance.py), [`evals/governance_report.json`](evals/governance_report.json) |
+| A final executive claim should be reconstructable end to end | [`platform_agents/audit.py`](platform_agents/audit.py), [`evals/audit_trace.json`](evals/audit_trace.json) |
 | Containment does not require blanket refusal | [`evals/adversarial_regional_sales_gpt-5.6-terra.json`](evals/adversarial_regional_sales_gpt-5.6-terra.json) |
 | Governance can reduce precision without destroying legitimate analytical value | [`evals/adversarial_customer_analytics_gpt-5.6-terra.json`](evals/adversarial_customer_analytics_gpt-5.6-terra.json) |
 | Correct identity does not establish historical validity | [`evals/adversarial_store_operations_gpt-5.6-terra.json`](evals/adversarial_store_operations_gpt-5.6-terra.json), [`semantic/attributes.yaml`](semantic/attributes.yaml) |
 | Adversarial results are measured rather than described informally | [`evals/adversarial_scorecard.json`](evals/adversarial_scorecard.json) |
 | Persisted adversarial evidence is reconstructed and checked in CI | [`.github/workflows/evaluations.yml`](.github/workflows/evaluations.yml) |
+| Independent specialists can execute concurrently without voting away evidence conflicts or acquiring spending authority | [`collaboration/coordinator.py`](collaboration/coordinator.py), [`collaboration/governor.py`](collaboration/governor.py), [`tests/`](tests/), [`docs/COLLABORATION.md`](docs/COLLABORATION.md) |
 
 ---
 
 # Architecture
+
+The [bounded collaboration extension](docs/COLLABORATION.md) runs three operational specialists concurrently before the forecasting boundary. It adds scoped evidence tools, deterministic reconciliation, timeout/retry limits, and replayable run artifacts. A sequential comparison checks whether scheduling changes the review decision. The default demonstration uses labeled synthetic fixtures; the optional live adapter uses the OpenAI Agents SDK.
+
+This is application-coordinated multi-agent collaboration. Agents do not recruit peers, negotiate authority, or resolve disagreement by majority vote.
 
 The system uses a governed multi-agent chain:
 
@@ -532,7 +537,7 @@ Controls adjudicate separately.
 # Repository Map
 
 ```text
-agents/
+platform_agents/
   registry.yaml          agent identities, objectives, topology
   envelope.py            evidence-carrying result envelope
   runtime.py             governed transfer decisions
@@ -544,6 +549,17 @@ agents/
   governance.py          deterministic governance inspection
   risk_governance.py     model-assisted governance explanation
   audit.py               executed-lineage reconstruction
+
+collaboration/
+  evidence.py            scoped synthetic-warehouse snapshots
+  backends.py            fixture backend and OpenAI Agents SDK adapter
+  coordinator.py         bounded parallel execution and attempt trace
+  governor.py            independent assessment and conflict containment
+  artifacts.py           persistence and decision replay
+
+tests/
+  test_collaboration.py   adversarial boundary and scheduler tests
+  test_sdk_collaboration.py real SDK runner with an offline model transport
 
 semantic/
   metrics.yaml           governed metric definitions
@@ -587,6 +603,8 @@ CI currently checks:
 - Python syntax,
 - evaluation cases,
 - governed control evidence,
+- bounded collaboration, failure paths, and offline SDK tool integration,
+- replay of a committed collaboration fixture,
 - reconstruction of the adversarial scorecard from persisted artifacts.
 
 If the scorecard no longer matches the underlying adversarial evidence, CI fails.
@@ -603,6 +621,8 @@ Create and activate a Python environment, install dependencies, and build the lo
 pip install -r requirements.txt
 python warehouse/build.py
 ```
+
+For the parallel multi-agent extension, install `requirements-collaboration.txt` and follow the [PyCharm and offline demo instructions](docs/COLLABORATION.md#run-in-pycharm). The original local `agents/` package is now `platform_agents/` to avoid shadowing the SDK's `agents` import. Existing module invocations therefore use `python -m platform_agents.<module>`.
 
 Run the deterministic evaluation layer:
 

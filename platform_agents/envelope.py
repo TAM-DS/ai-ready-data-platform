@@ -82,3 +82,4 @@ class ResultEnvelope:
         """Return a validated serializable representation."""
         self.validate()
         return asdict(self)
+

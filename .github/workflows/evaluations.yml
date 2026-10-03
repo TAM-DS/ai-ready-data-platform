@@ -17,10 +17,28 @@ jobs:
           python-version: "3.14"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r requirements-collaboration.txt
 
       - name: Validate Python syntax
-        run: python -m compileall -q agents evals semantic policy
+        run: python -m compileall -q platform_agents collaboration tests evals semantic policy
+
+      - name: Test bounded collaboration and offline SDK integration
+        run: python -m unittest discover -s tests -v
+
+      - name: Replay committed collaboration evidence
+        run: |
+          python -m collaboration verify evals/collaboration_invalid_fixture.json
+          python -m collaboration verify evals/collaboration_invalid_fixture-sequential.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          parallel = json.loads(Path("evals/collaboration_invalid_fixture.json").read_text())
+          sequential = json.loads(Path("evals/collaboration_invalid_fixture-sequential.json").read_text())
+          if parallel["summary"] != sequential["summary"]:
+              raise SystemExit("Persisted sequential/parallel review decisions differ.")
+          print("PASS persisted sequential/parallel decision equivalence")
+          PY
 
       - name: Validate evaluation cases
         run: python evals/run.py
