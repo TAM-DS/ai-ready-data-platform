@@ -114,6 +114,8 @@ The observation records user-supplied stdout, not an independently inspected ful
 .venv/bin/python -m collaboration verify collaboration-artifacts/mac-live-01.json
 ```
 
+The user executed this saved-artifact replay on the M5 and reported `verified: true`, `READY_FOR_REVIEW`, four accepted claims, zero blocked claims, and zero conflicts. The replay result is included in the terminal observation record. It demonstrates reconstruction against the captured facts and current controls; it does not independently authenticate the warehouse or model provider.
+
 One successful clean synthetic run establishes that this live path worked in that environment. It does not establish production reliability, live adversarial containment, or measured provider cost.
 
 ## Bounds and evidence

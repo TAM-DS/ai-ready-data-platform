@@ -12,7 +12,7 @@
   },
   "selected_model": "gpt-6-luna",
   "command": ".venv/bin/python -m collaboration demo --mode live --output collaboration-artifacts/mac-live-01.json",
-  "evidence_scope": "The user executed the live command and supplied its terminal summary. The full local run artifact has not been independently inspected or committed. This observation is not a replayable run artifact.",
+  "evidence_scope": "The user executed the live command and supplied its terminal summary, then executed saved-artifact verification and supplied the successful replay result. The full local run artifact has not been independently inspected or committed. This observation is not itself a replayable run artifact.",
   "reported_summary": {
     "mode": "live",
     "state": "READY_FOR_REVIEW",
@@ -33,6 +33,15 @@
       "timing_interpretation": "Measured this run; no latency or cost SLA."
     },
     "artifact_sha256": "3f9199c37b7031f81768aaf63c452859915ec125eb456856a958b6d2bc81ba7a"
+  },
+  "replay_command": ".venv/bin/python -m collaboration verify collaboration-artifacts/mac-live-01.json",
+  "reported_replay": {
+    "verified": true,
+    "trace_id": "collaboration-c59bfa7b9d67b29a",
+    "state": "READY_FOR_REVIEW",
+    "accepted_claims": 4,
+    "blocked_claims": 0,
+    "conflicts": 0
   },
   "limitations": [
     "One successful clean synthetic scenario; no live adversarial evaluation was performed.",
