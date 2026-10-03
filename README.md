@@ -14,6 +14,19 @@ The objective is not to make the model appear trustworthy.
 
 The objective is to build an architecture that can establish **why a result deserves reliance, what it is allowed to become, and where it must stop.**
 
+The platform now combines the original governed business chain with **bounded parallel specialists using the OpenAI Agents SDK**. Regional Sales, Customer Analytics, and Store Operations propose claims from scoped evidence. Independent controls determine eligibility, contain disagreement, and construct the review package. Both paths live in this repository.
+
+## Current Evidence
+
+| Validation | Observed result | Inspect the evidence |
+|---|---|---|
+| Automated boundary and runtime tests | **35 tests passed** on the M5 and in Ubuntu/Python 3.14 and Apple Silicon macOS/Python 3.13 CI | [`tests/`](tests/), [CI workflow](.github/workflows/evaluations.yml) |
+| Parallel adversarial fixture | The inflated **$300** proposal is blocked; three supported envelopes survive; sequential and parallel review decisions match | [Parallel artifact](evals/collaboration_invalid_fixture.json), [sequential baseline](evals/collaboration_invalid_fixture-sequential.json) |
+| Live OpenAI Agents SDK run | `gpt-6-luna`; three specialist runs; peak concurrency three; `READY_FOR_REVIEW`; no spending authority | [Recorded M5 terminal observation](evals/collaboration_live_observation.json) |
+| Saved live-artifact replay | User-executed verification reports **four accepted claims**, zero blocked claims, and zero conflicts | [Recorded replay result](evals/collaboration_live_observation.json), [replay implementation](collaboration/artifacts.py) |
+
+The live observation was recorded on October 3, 2026, using Python 3.13.14 on a MacBook Air M5. One clean synthetic run took **8.181 seconds**. Its terminal output and replay result are committed; the full live artifact remains on the workstation. This is evidence of a successful live path, with no sequential live benchmark or production reliability claim. See [validation scope](docs/COLLABORATION.md#validation-scope).
+
 ---
 
 ## The Core Idea
@@ -97,50 +110,61 @@ Every major claim in this README is tied to code, persisted evidence, or a repro
 | Adversarial results are measured rather than described informally | [`evals/adversarial_scorecard.json`](evals/adversarial_scorecard.json) |
 | Persisted adversarial evidence is reconstructed and checked in CI | [`.github/workflows/evaluations.yml`](.github/workflows/evaluations.yml) |
 | Independent specialists can execute concurrently without voting away evidence conflicts or acquiring spending authority | [`collaboration/coordinator.py`](collaboration/coordinator.py), [`collaboration/governor.py`](collaboration/governor.py), [`tests/`](tests/), [`docs/COLLABORATION.md`](docs/COLLABORATION.md) |
+| Parallel scheduling can preserve the sequential review decision while containing an invalid proposal | [Parallel fixture](evals/collaboration_invalid_fixture.json), [sequential baseline](evals/collaboration_invalid_fixture-sequential.json), [`tests/test_collaboration.py`](tests/test_collaboration.py) |
+| The live SDK path completed on the M5 and its saved decisions were replayed locally | [User-provided live and replay observations](evals/collaboration_live_observation.json), [`docs/COLLABORATION.md`](docs/COLLABORATION.md) |
 
 ---
 
 # Architecture
 
-The [bounded collaboration extension](docs/COLLABORATION.md) runs three operational specialists concurrently before the forecasting boundary. It adds scoped evidence tools, deterministic reconciliation, timeout/retry limits, and replayable run artifacts. A sequential comparison checks whether scheduling changes the review decision. The default demonstration uses labeled synthetic fixtures; the optional live adapter uses the OpenAI Agents SDK.
+The original business chain progresses from **Financial Analyst** through **Forecasting**, **Planning**, **Finance / CapEx**, and **Executive Reporting**. Risk & Governance independently inspects whether controls held; Audit reconstructs how the final claim acquired its meaning and authority.
 
-This is application-coordinated multi-agent collaboration. Agents do not recruit peers, negotiate authority, or resolve disagreement by majority vote.
+The [parallel collaboration layer](docs/COLLABORATION.md) extends the operational roles already used for adversarial testing:
 
-The system uses a governed multi-agent chain:
-
-```text
-Financial Analyst
-      ↓
-  Forecasting
-      ↓
-   Planning
-      ↓
- Finance / CapEx
-      ↓
-Executive Reporting
+```mermaid
+flowchart TD
+  S["Application-approved warehouse snapshot"] --> R["Regional Sales"]
+  S --> C["Customer Analytics"]
+  S --> O["Store Operations"]
+  R --> G["Independent assessment and reconciliation"]
+  C --> G
+  O --> G
+  G --> E["Supported review package and evidence"]
+  G --> W["Unsupported or conflicting claims withheld"]
 ```
 
-Two independent oversight paths sit outside the business chain:
+The SDK backend gives each specialist a scoped read-only `read_fact` tool and requires a typed candidate reply. The application binds its identity and capability. Models receive no SQL interface, warehouse connection, customer identifiers, peer-routing tool, or spending tool.
 
-```text
-Risk & Governance
-→ Did the deterministic controls hold?
+The governor checks source value, metric, grain, time basis, fact/scenario kind, capability, and restrictions. It constructs canonical meaning from the approved evidence and preserves model wording for inspection. Eligible envelopes pass the existing `forecasting_input` routing gate before reconciliation.
 
-Audit
-→ How did this final claim acquire its meaning and authority?
-```
+**The collaboration demo ends at the review package.** It does not automatically execute the original forecasting, planning, or CapEx chain. The original control logic and persisted model observations are preserved; the local package is now `platform_agents/` so it does not shadow the SDK's `agents` import.
 
-Supporting operational roles are used for adversarial testing:
-
-```text
-Regional Sales Manager
-Customer Analytics
-Store Operations
-```
+This is application-coordinated collaboration. Agreement grants no additional authority. Different eligible values for the same semantic identity cause all conflicting claims to be withheld. The regional and store totals share a warehouse snapshot, so their agreement is not independent source corroboration.
 
 The important architectural choice is that **agents do not grant themselves authority**.
 
 Each stage produces evidence. Controls independently determine whether that evidence is sufficient for a specific downstream use.
+
+---
+
+# Bounded Parallel Collaboration
+
+The business objective is a scoped executive review of September 2026 store performance. The controls preserve order-grain gross revenue, aggregate customer findings, and the distinction between current organizational attributes and historical truth. Customer findings describe September sales of the currently classified VIP cohort; the region finding describes a current store assignment.
+
+| Scenario | Review state | What happens |
+|---|---|---|
+| `clean` | `READY_FOR_REVIEW` | Four supported envelopes retain their provenance and restrictions |
+| `invalid` | `REVIEW_REQUIRED` | The $300 fanout proposal is blocked; three supported envelopes remain useful |
+| `timeout` | `READY_FOR_REVIEW` after recovery | The first store attempt times out; its failure remains in the trace after a successful bounded retry |
+| `conflict` | `REVIEW_REQUIRED` | An explicitly injected $100/$120 source disagreement is withheld; unrelated findings survive |
+
+The defaults allow **three concurrent specialists, two attempts per specialist, six specialist runs total, and three SDK turns per attempt**, with 1,000 requested output tokens per model call. Only timeouts and transient transport failures are retried. Unexpected failures remain visible; parent cancellation drains active tasks. These are execution bounds, not a hard monetary budget.
+
+`READY_FOR_REVIEW` requires complete specialist coverage with no failed tasks, blocked candidates, or unresolved conflicts. It is a review state. **`spend_authorized` remains false in every scenario.**
+
+The run artifact retains task inputs, attempts, failure types, candidate proposals, assessment reasons, conflicts, accepted envelopes, and an event trace. Verification checks the checksum and reconstructs decisions from captured facts under current controls. A hash is not an authenticated signature; replay does not independently establish warehouse or actor identity.
+
+The default fixture works offline after dependency installation. SDK integration tests use the real runner, scoped tool, and structured output schema with an injected offline model. The separately recorded live observation covers one clean synthetic run. See [the implementation and run guide](docs/COLLABORATION.md) for detailed bounds and evidence limits.
 
 ---
 
@@ -551,6 +575,7 @@ platform_agents/
   audit.py               executed-lineage reconstruction
 
 collaboration/
+  __main__.py            runnable demo and saved-artifact verification CLI
   evidence.py            scoped synthetic-warehouse snapshots
   backends.py            fixture backend and OpenAI Agents SDK adapter
   coordinator.py         bounded parallel execution and attempt trace
@@ -583,6 +608,12 @@ evals/
   adversarial_scorecard.json
   governance_report.json
   audit_trace.json
+  collaboration_invalid_fixture.json
+  collaboration_invalid_fixture-sequential.json
+  collaboration_live_observation.json
+
+docs/
+  COLLABORATION.md        architecture, PyCharm setup, execution and evidence limits
 
 warehouse/
   build.py               local enterprise-data surrogate
@@ -598,13 +629,15 @@ warehouse/
 
 Pull requests run deterministic validation without requiring live model calls.
 
+The same checks run on **Ubuntu with Python 3.14** and **Apple Silicon macOS with Python 3.13**. The live M5 observation and local replay are documented separately from automated CI.
+
 CI currently checks:
 
 - Python syntax,
 - evaluation cases,
 - governed control evidence,
 - bounded collaboration, failure paths, and offline SDK tool integration,
-- replay of a committed collaboration fixture,
+- replay of both committed collaboration fixtures and comparison of their review decisions,
 - reconstruction of the adversarial scorecard from persisted artifacts.
 
 If the scorecard no longer matches the underlying adversarial evidence, CI fails.
@@ -615,20 +648,46 @@ That makes evidence drift a build problem rather than a documentation problem.
 
 # How to Run
 
-Create and activate a Python environment, install dependencies, and build the local warehouse.
+From the repository root, create a Python 3.13 project environment and install the original dependencies plus the pinned OpenAI Agents SDK. The Mac workstation quickstart uses `uv`:
 
 ```bash
-pip install -r requirements.txt
-python warehouse/build.py
+uv venv --python 3.13 .venv
+uv pip install --python .venv/bin/python -r requirements-collaboration.txt
+.venv/bin/python -m unittest discover -s tests -v
 ```
 
-For the parallel multi-agent extension, install `requirements-collaboration.txt` and follow the [PyCharm and offline demo instructions](docs/COLLABORATION.md#run-in-pycharm). The original local `agents/` package is now `platform_agents/` to avoid shadowing the SDK's `agents` import. Existing module invocations therefore use `python -m platform_agents.<module>`.
+In PyCharm, select this project's `.venv/bin/python` as the interpreter. With another environment manager, install `requirements-collaboration.txt` into that project's virtual environment. See the [PyCharm setup guide](docs/COLLABORATION.md#run-in-pycharm).
+
+Run the offline adversarial demo and sequential comparison:
+
+```bash
+.venv/bin/python -m collaboration demo --scenario invalid --compare
+```
+
+The demo builds the repository's local synthetic warehouse automatically. Expect `decision_equivalent: true`, `REVIEW_REQUIRED`, and `spend_authorized: false`: the invalid proposal is intentionally blocked. Use `clean`, `timeout`, or `conflict` to explore the other scenarios. Fixture delays are simulated; their timings are not live-model performance measurements.
+
+To save both comparison artifacts, choose a new output filename:
+
+```bash
+.venv/bin/python -m collaboration demo --scenario invalid --compare --output collaboration-artifacts/invalid-01.json
+.venv/bin/python -m collaboration verify collaboration-artifacts/invalid-01.json
+.venv/bin/python -m collaboration verify collaboration-artifacts/invalid-01-sequential.json
+```
+
+For real API execution, configure `OPENAI_API_KEY` in your local environment or PyCharm run configuration. This example explicitly selects the model used in the recorded live observation:
+
+```bash
+.venv/bin/python -m collaboration demo --mode live --model gpt-6-luna --output collaboration-artifacts/live-01.json
+.venv/bin/python -m collaboration verify collaboration-artifacts/live-01.json
+```
+
+Live mode makes OpenAI API calls with scoped synthetic facts. It excludes fixture fault injection and sequential comparison. Model selection can also come from `OPENAI_MODEL`. Keep credentials local; artifacts retain evidence and never overwrite earlier runs.
 
 Run the deterministic evaluation layer:
 
 ```bash
-python evals/run.py
-python evals/controls.py
+.venv/bin/python evals/run.py
+.venv/bin/python evals/controls.py
 ```
 
 Rebuild the adversarial scorecard in Python:
@@ -656,6 +715,8 @@ The experiments use:
 - deterministic controls around those observations.
 
 The scorecard measures only the tested scenarios and tested claims.
+
+The live SDK observation demonstrates one successful clean synthetic workflow on the M5. It does not establish live adversarial containment, a live-model speedup, measured provider cost, or production reliability. Application role binding is not production authentication, and aggregate-only payloads are not a demonstrated anonymization guarantee for small cohorts. Full run artifacts and the committed terminal observation have different evidence scopes, documented in [the collaboration guide](docs/COLLABORATION.md).
 
 A passing control does not establish that every possible business question, model output, security condition, or organizational policy has been validated.
 
